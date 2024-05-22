@@ -17,6 +17,5 @@ namespace ArmSclad.Infrastructure.Database.Model
 
 
         public DateTime Created { get; set; }
-        public DateTime LastModify { get; set; }
     }
 }

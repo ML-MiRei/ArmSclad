@@ -31,6 +31,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             {
                 db.DbContext.Storages.Remove(storage);
                 db.DbContext.SaveChanges();
+                return;
             }
             throw new NotFoundException();
 
@@ -62,6 +63,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
                 db.DbContext.Storages.Update(storage);
                 db.DbContext.SaveChanges();
+                return;
             }
             throw new NotFoundException();
         }

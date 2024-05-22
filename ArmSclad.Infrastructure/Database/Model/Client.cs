@@ -17,9 +17,7 @@ namespace ArmSclad.Infrastructure.Database.Model
         public int Status {  get; set; }
 
 
-        public bool IsActive { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastModify { get; set; }
+        public bool IsActive { get; set; } = true;
 
     }
 }

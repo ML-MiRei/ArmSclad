@@ -18,8 +18,6 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 Email = clientEntity.Email,
                 Phone = clientEntity.Phone,
                 Status = (int)clientEntity.Status,
-                LastModify = DateTime.Now,
-                Created = DateTime.Now,
                 IsActive = true
             };
 

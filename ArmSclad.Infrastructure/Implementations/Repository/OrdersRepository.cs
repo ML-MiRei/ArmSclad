@@ -42,24 +42,6 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
         {
             return db.DbContext.Orders.Where(o => o.IsActive).Select(or => new OrderEntity()
             {
-                //DeliveryTime = or.DeliveryTime,
-                //Address = or.Address,
-                //ClientId = or.ClientId,
-                //Id = or.Id,
-                //Products = db.DbContext.Products.Join(
-                //    db.DbContext.OrderProducts,
-                //    p => p.Id,
-                //    op => op.ProductId,
-                //    (p, op) => new { op, p }).Where(p => p.op.OrderId == or.Id).Select(p => new ProductEntity
-                //    {
-                //        Description = p.p.Description,
-                //        Id = p.p.Id,
-                //        Name = p.p.Name,
-                //        Price = p.p.Price,
-                //        SpaceOccupied = p.p.SpaceOccupied,
-                //        NumberPackages = p.p.NumberPackages,
-                //        NumberPiecesInPackage = p.p.NumberPiecesInPackage
-                //    }).ToList()
                 DeliveryTime = or.DeliveryTime,
                 Address = or.Address,
                 ClientId = or.ClientId,

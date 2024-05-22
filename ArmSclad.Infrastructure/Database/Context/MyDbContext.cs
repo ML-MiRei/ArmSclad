@@ -9,7 +9,7 @@ namespace ArmSclad.Infrastructure.Database.Context
         public DbSet<Client> Clients { get; set; }
         public DbSet<ClientStatus> ClientStatuses { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<EmployeePosition> EmploeePositions { get; set; }
+        public DbSet<EmployeePosition> EmployeePositions { get; set; }
         public DbSet<EmployeeRole> EmployeeRoles { get; set; }
         public DbSet<Operation> Operations { get; set; }
         public DbSet<OperationStatus> OperationStatuses { get; set; }
@@ -28,8 +28,11 @@ namespace ArmSclad.Infrastructure.Database.Context
             modelBuilder.Entity<OrderProduct>().HasKey(p => new { p.OrderId, p.ProductId });
             modelBuilder.Entity<StorageProduct>().HasKey(s => new { s.StorageId, s.ProductId });
 
-            modelBuilder.Entity<Client>().ToTable(tb => tb.HasTrigger("insert_client_trigger"));
-            modelBuilder.Entity<Operation>().ToTable(tb => tb.HasTrigger("insert_operation_trigger"));
+            modelBuilder.Entity<Client>().ToTable(tb => tb.HasTrigger("update_client_trigger"));
+            modelBuilder.Entity<Storage>().ToTable(tb => tb.HasTrigger("update_storage_trigger"));
+            modelBuilder.Entity<Order>().ToTable(tb => tb.HasTrigger("update_order_trigger"));
+            modelBuilder.Entity<Product>().ToTable(tb => tb.HasTrigger("update_product_trigger"));
+            modelBuilder.Entity<Employee>().ToTable(tb => tb.HasTrigger("delete_employee_trigger"));
 
             base.OnModelCreating(modelBuilder);
         }

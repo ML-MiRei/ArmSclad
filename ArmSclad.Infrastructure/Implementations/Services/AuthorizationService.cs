@@ -11,7 +11,8 @@ namespace ArmSclad.Infrastructure.Implementations.Services
     {
         public EmployeeEntity Authorize(string email, string password)
         {
-            var employee = db.DbContext.Employees.Find(email);
+            var t = db.DbContext.Employees.Count();
+            var employee = db.DbContext.Employees.FirstOrDefault(emp => emp.IsActive && emp.Email == email);
             if (employee == null)
                 throw new EmailNotExistException();
             if (employee.Password != password)
@@ -25,7 +26,7 @@ namespace ArmSclad.Infrastructure.Implementations.Services
                 Password = password,
                 Phone = employee.Phone,
                 Id = employee.Id,
-                Position = db.DbContext.EmploeePositions.Find(employee.Position).Name,
+                Position = db.DbContext.EmployeePositions.Find(employee.Position).Name,
                 Role = (EmployeeRoleEnum)employee.Role,
                 StorageId = employee.StorageId
             };
@@ -43,6 +44,11 @@ namespace ArmSclad.Infrastructure.Implementations.Services
 
         public EmployeeEntity Registrate(EmployeeEntity employeeEntity)
         {
+            var isEmployee = db.DbContext.Employees.FirstOrDefault(emp => emp.Email == employeeEntity.Email);
+
+            if (isEmployee != null)
+                throw new EmailExistException();
+
             Employee employee = new Employee
             {
                 FirstName = employeeEntity.FirstName,
@@ -54,11 +60,11 @@ namespace ArmSclad.Infrastructure.Implementations.Services
                 Role = (int)employeeEntity.Role
             };
 
-            EmployeePosition employeePosition = db.DbContext.EmploeePositions.First(ep => ep.Name == employeeEntity.Position);
+            EmployeePosition employeePosition = db.DbContext.EmployeePositions.First(ep => ep.Name == employeeEntity.Position);
             if (employeePosition == null)
             {
                 employeePosition = new EmployeePosition { Name = employeeEntity.Position };
-                db.DbContext.EmploeePositions.Add(employeePosition);
+                db.DbContext.EmployeePositions.Add(employeePosition);
                 db.DbContext.SaveChanges();
             }
 

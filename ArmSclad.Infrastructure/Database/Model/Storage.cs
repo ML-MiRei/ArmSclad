@@ -14,9 +14,7 @@ namespace ArmSclad.Infrastructure.Database.Model
         public float Capacity { get; set; }
 
 
-        public bool IsActive {  get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastModify { get; set; }
+        public bool IsActive { get; set; } = true;
 
     }
 }
