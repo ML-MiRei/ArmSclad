@@ -8,7 +8,10 @@ namespace ArmSclad.Domain.UseCases.Storages.Queries.GetStorages
     {
         public Task<List<StorageEntity>> Handle(GetStoragesQuery request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => storagesRepository.Get(request.From, request.To));
+            if (request.FilterStorages == null)
+                return Task.Run(() => storagesRepository.Get(request.From, request.To));
+            return Task.Run(() => storagesRepository.Get(request.FilterStorages, request.From, request.To));
+
         }
     }
 }

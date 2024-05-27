@@ -3,6 +3,7 @@ using ArmSclad.Core.Entities;
 using ArmSclad.Core.Exceptions;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Database.Model;
+using System.Diagnostics;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
@@ -14,10 +15,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             {
                 Description = productEntity.Description,
                 Name = productEntity.Name,
-                NumberPackages = productEntity.NumberPackages,
-                NumberPiecesInPackage = productEntity.NumberPiecesInPackage,
-                Price = productEntity.Price,
-                SpaceOccupied = productEntity.SpaceOccupied
+                NumberPiecesInPackage = productEntity.NumberPiecesInPackage.Value,
+                Price = productEntity.Price.Value,
+                SpaceOccupied = productEntity.SpaceOccupied.Value
             };
 
             db.DbContext.Products.Add(product);
@@ -38,10 +38,24 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             throw new NotFoundException();
         }
 
+        public List<ProductEntity> Get(int from = 0, int to = 10)
+        {
+            return db.DbContext.Products.Where(p => p.IsActive).OrderBy(p => p.Name).Select(p => 
+            new ProductEntity
+            {
+                Description = p.Description,
+                Name = p.Name,
+                SpaceOccupied = p.SpaceOccupied,
+                Id = p.Id,
+                Price = p.Price,
+                NumberPiecesInPackage = p.NumberPiecesInPackage
+            }).Skip(from).Take(to).ToList();
+        }
+
         public List<ProductEntity> GetByOrder(int orderId, int from = 0, int to = 10)
         {
             return db.DbContext.Products.Join(
-                db.DbContext.OrderProducts.Where(ord => ord.OrderId == orderId),
+                db.DbContext.OrdersProducts.Where(ord => ord.OrderId == orderId),
                 p => p.Id,
                 o => o.ProductId,
                 (p, o) => new ProductEntity
@@ -51,7 +65,6 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                     SpaceOccupied = p.SpaceOccupied,
                     Id = p.Id,
                     Price = p.Price,
-                    NumberPackages = p.NumberPackages,
                     NumberPiecesInPackage = p.NumberPiecesInPackage
                 }).Skip(from).Take(to).ToList();
         }
@@ -59,7 +72,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
         public List<ProductEntity> GetByStorage(int storageId, int from = 0, int to = 10)
         {
             return db.DbContext.Products.Join(
-               db.DbContext.StorageProducts.Where(stg => stg.StorageId == storageId),
+               db.DbContext.StoragesProducts.Where(stg => stg.StorageId == storageId),
                p => p.Id,
                o => o.ProductId,
                (p, o) => new ProductEntity
@@ -69,7 +82,6 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                    SpaceOccupied = p.SpaceOccupied,
                    Id = p.Id,
                    Price = p.Price,
-                   NumberPackages = p.NumberPackages,
                    NumberPiecesInPackage = p.NumberPiecesInPackage
                }).Skip(from).Take(to).ToList();
         }
@@ -80,11 +92,10 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             if (product != null)
             {
                 product.Description = productEntity.Description;
-                product.Price = productEntity.Price;
-                product.SpaceOccupied = productEntity.SpaceOccupied;
-                product.NumberPackages = productEntity.NumberPackages;
+                product.Price = productEntity.Price.Value;
+                product.SpaceOccupied = productEntity.SpaceOccupied.Value;
                 product.Name = productEntity.Name;
-                product.NumberPiecesInPackage = productEntity.NumberPiecesInPackage;
+                product.NumberPiecesInPackage = productEntity.NumberPiecesInPackage.Value;
 
                 db.DbContext.Products.Update(product);
                 db.DbContext.SaveChanges();

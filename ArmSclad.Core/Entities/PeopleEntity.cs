@@ -8,6 +8,6 @@
         public string Phone { get; set; }
         public string Email { get; set; }
         public string FullName => LastName + " " + FirstName + " " + SecondName;
-        public string ShortFullName => FirstName[0] + "." + SecondName + ". " + LastName;
+        public string ShortFullName => FirstName[0] + "." + SecondName[0] + ". " + LastName;
     }
 }

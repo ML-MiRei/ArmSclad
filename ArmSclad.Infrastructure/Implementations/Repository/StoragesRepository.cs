@@ -13,7 +13,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             Storage storage = new Storage
             {
                 Address = storageEntity.Address,
-                Capacity = storageEntity.Capacity,
+                Capacity = storageEntity.Capacity.Value,
                 ClosingTime = storageEntity.ClosingTime,
                 Name = storageEntity.Name,
                 OpeningTime = storageEntity.OpeningTime
@@ -39,7 +39,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         public List<StorageEntity> Get(int from = 0, int to = 10)
         {
-            return db.DbContext.Storages.Where(s => s.IsActive).Select(s => new StorageEntity
+
+            return db.DbContext.Storages.Where(s => s.IsActive).OrderBy(s => s.Name).Select(s => new StorageEntity
             {
                 Address = s.Address,
                 Capacity = s.Capacity,
@@ -50,13 +51,45 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             }).Skip(from).Take(to).ToList();
         }
 
+
+
+        public List<StorageEntity> Get(Domain.FiltersModels.FilterStorages filterStorages, int from, int to)
+        {
+
+            var storages = db.DbContext.Storages.Where(s => s.IsActive);
+
+            if (filterStorages.SearchName != null)
+                storages = storages.Where(s => s.Name.Contains(filterStorages.SearchName));
+
+            if (filterStorages.MaxCapacity != null)
+                storages = storages.Where(s => s.Capacity <= filterStorages.MaxCapacity);
+
+            if (filterStorages.MinCapacity != null)
+                storages = storages.Where(s => s.Capacity >= filterStorages.MinCapacity);
+
+            if (filterStorages.WorkTime != null)
+                storages = storages.Where(s => s.OpeningTime.TimeOfDay <= filterStorages.WorkTime.Value.TimeOfDay && s.ClosingTime.TimeOfDay >= filterStorages.WorkTime.Value.TimeOfDay);
+
+
+            return storages.OrderBy(s => s.Name).Select(s => new StorageEntity
+            {
+                Address = s.Address,
+                Capacity = s.Capacity,
+                ClosingTime = s.ClosingTime,
+                OpeningTime = s.OpeningTime,
+                Id = s.Id,
+                Name = s.Name
+            }).Skip(from).Take(to).ToList(); ;
+
+        }
+
         public void Update(StorageEntity storageEntity)
         {
             Storage storage = db.DbContext.Storages.Find(storageEntity.Id);
             if (storage != null)
             {
                 storage.Address = storageEntity.Address;
-                storage.Capacity = storageEntity.Capacity;
+                storage.Capacity = storageEntity.Capacity.Value;
                 storage.ClosingTime = storageEntity.ClosingTime;
                 storage.Name = storageEntity.Name;
                 storage.OpeningTime = storageEntity.OpeningTime;

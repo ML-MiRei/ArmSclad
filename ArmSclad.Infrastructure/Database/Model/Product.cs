@@ -9,10 +9,9 @@ namespace ArmSclad.Infrastructure.Database.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public float NumberPackages { get; set; }
-        public float NumberPiecesInPackage { get; set; }
-        public float SpaceOccupied { get; set; }
-        public float Price { get; set; }
+        public double NumberPiecesInPackage { get; set; }
+        public double SpaceOccupied { get; set; }
+        public double Price { get; set; }
 
         public bool IsActive { get; set; } = true;
 

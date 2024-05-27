@@ -3,8 +3,8 @@ using MediatR;
 
 namespace ArmSclad.Domain.UseCases.Clients.Commands.DeleteClient
 {
-    internal class DeleteClientCommand : IRequest
+    public class DeleteClientCommand : IRequest
     {
-        public ClientEntity ClientEntity { get; set; }
+        public int ClientId { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace ArmSclad.Infrastructure.Database.Model
 
         public int Role {  get; set; }
         public int Position {  get; set; }
-        public int StorageId {  get; set; }
+        public int? StorageId {  get; set; }
 
 
         public bool IsActive { get; set; } = true;

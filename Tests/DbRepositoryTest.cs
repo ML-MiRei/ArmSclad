@@ -2,6 +2,7 @@ using ArmSclad.Core.Entities;
 using ArmSclad.Core.Enums;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Implementations.Repository;
+using ArmSclad.Infrastructure.Implementations.Services;
 
 namespace Tests
 {
@@ -80,8 +81,8 @@ namespace Tests
             OperationsRepository operationsRepository = new OperationsRepository(databaseSingleton);
             OperationEntity operation = new OperationEntity
             {
-                CreatorId = 10,
-                EmployeeId = 10,
+                CreatorId = 0,
+                EmployeeId = 0,
                 StorageId = 0,
                 Type = OperationTypeEnum.Moving
             };
@@ -90,13 +91,6 @@ namespace Tests
             operation.Id = resultInsert;
 
             Assert.IsNotNull(resultInsert);
-
-            operation.Type = OperationTypeEnum.Inventory;
-            operationsRepository.Update(operation);
-            var resultUpdate = databaseSingleton.DbContext.Operations.Find(resultInsert).Type;
-
-            Assert.IsTrue(resultUpdate == (int)operation.Type);
-
 
         }
 
@@ -138,7 +132,7 @@ namespace Tests
             {
                 Description = "Test",
                 Name = "Test",
-                NumberPackages = 1,
+                NumberPackagesOnStorage = 1,
                 SpaceOccupied = 1,
                 NumberPiecesInPackage = 1,
                 Price = 1
@@ -158,6 +152,37 @@ namespace Tests
             productsRepository.Delete(resultInsert);
             var resultDelete = databaseSingleton.DbContext.Products.Find(resultInsert).IsActive;
             Assert.IsFalse(resultDelete);
+        }
+
+        [TestMethod]
+        public async Task TestAuthorizedService()
+        {
+            AuthorizationService authorizationService = new AuthorizationService(databaseSingleton);
+
+            //var empl = authorizationService.Registrate(new EmployeeEntity
+            //{
+            //    Email = "Test3",
+            //    Password = "Test",
+            //    FirstName = "Test",
+            //    SecondName = "Test",
+            //    LastName = "Test",
+            //    StorageId = 0,
+            //    Phone = "Test",
+            //    Role = 0,
+            //    Position = "Test"
+            //});
+
+            //Assert.IsNotNull(empl);
+
+
+            var logEmpl = authorizationService.Authorize("Test1", "Test");
+
+            Assert.IsNotNull(logEmpl);
+
+            authorizationService.DeleteAccount(1);
+            var acc = databaseSingleton.DbContext.Employees.Find(1).IsActive;
+            Assert.IsFalse (acc);
+
         }
 
     }

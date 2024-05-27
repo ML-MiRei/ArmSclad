@@ -6,7 +6,7 @@ namespace ArmSclad.Core.Entities
     {
         public EmployeeRoleEnum Role {  get; set; }
         public string Position {  get; set; }
-        public int StorageId { get; set; }
+        public int? StorageId { get; set; }
         public string Password { get; set; }
 
     }

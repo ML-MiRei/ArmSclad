@@ -4,24 +4,23 @@
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public float NumberPackages { get; set; }
-        public float NumberPiecesInPackage { get; set; }
+        public double? NumberPackagesOnStorage { get; set; } = null;
+        public double? NumberPiecesInPackage { get; set; } = null;
 
         //занимаемое пространство одной упаковкой
-        public float SpaceOccupied { get; set; }
+        public double? SpaceOccupied { get; set; } = null;
 
         //всё занимаемое пространство
-        public float AllSpaceOccupied => SpaceOccupied * NumberPackages;
+        public double? AllSpaceOccupied => SpaceOccupied * NumberPackagesOnStorage;
 
         //цена за единицу товара
-        public float Price { get; set; }
+        public double? Price { get; set; } = null;
 
         //цена за упаковку
-        public float PricePackage => Price * NumberPiecesInPackage;
+        public double? PricePackage => Price * NumberPiecesInPackage;
 
         //цена за весь товар на складе
-        public float AllPrice => PricePackage * NumberPackages;
-
+        public double? AllPrice => PricePackage * NumberPackagesOnStorage;
 
     }
 }

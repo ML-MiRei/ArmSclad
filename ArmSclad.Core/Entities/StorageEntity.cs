@@ -2,15 +2,15 @@
 {
     public class StorageEntity : BaseEntity
     {
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public DateTime OpeningTime { get; set; }
-        public DateTime ClosingTime { get; set; }
-        public float Capacity { get; set; }
-        public List<ProductEntity> Products { get; set; }
+        public string Name { get; set; } = "";
+        public string Address { get; set; } = "";
+        public DateTime OpeningTime { get; set; } = DateTime.Now;
+        public DateTime ClosingTime { get; set; } = DateTime.Now;
+        public double? Capacity { get; set; } = null;
+        public List<ProductEntity> Products { get; set; } = new List<ProductEntity>();
 
-        //свободно место
-        public double RemainingCapacity => Capacity - Products.Sum(p => p.AllSpaceOccupied);
+        //занятое место
+        public double? OccupiedCapacity =>  Products.Sum(p => p.AllSpaceOccupied);
 
         //проверка вместимости ряда продуктов
         public bool IsEnoughCapacity(params ProductEntity[] products)

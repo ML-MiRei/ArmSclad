@@ -13,7 +13,6 @@ namespace ArmSclad.Infrastructure.Database.Model
         public int Type {  get; set; }
         public int Status { get; set; }
         public int StorageId { get; set; }
-        public int EmployeeId { get; set; }
 
 
         public DateTime Created { get; set; }

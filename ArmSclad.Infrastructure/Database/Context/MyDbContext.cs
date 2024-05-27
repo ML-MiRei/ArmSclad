@@ -14,11 +14,12 @@ namespace ArmSclad.Infrastructure.Database.Context
         public DbSet<Operation> Operations { get; set; }
         public DbSet<OperationStatus> OperationStatuses { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
+        public DbSet<OperationProduct> OperationsProducts { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<OrderProduct> OrdersProducts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Storage> Storages { get; set; }
-        public DbSet<StorageProduct> StorageProducts { get; set; }
+        public DbSet<StorageProduct> StoragesProducts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +28,7 @@ namespace ArmSclad.Infrastructure.Database.Context
             //создание составных ключей
             modelBuilder.Entity<OrderProduct>().HasKey(p => new { p.OrderId, p.ProductId });
             modelBuilder.Entity<StorageProduct>().HasKey(s => new { s.StorageId, s.ProductId });
+            modelBuilder.Entity<OperationProduct>().HasKey(o => new { o.ProductId, o.OperationId });
 
             modelBuilder.Entity<Client>().ToTable(tb => tb.HasTrigger("update_client_trigger"));
             modelBuilder.Entity<Storage>().ToTable(tb => tb.HasTrigger("update_storage_trigger"));

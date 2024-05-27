@@ -11,7 +11,7 @@ namespace ArmSclad.Infrastructure.Database.Model
         public string Address { get; set; }
         public DateTime OpeningTime {  get; set; }
         public DateTime ClosingTime {  get; set; }
-        public float Capacity { get; set; }
+        public double Capacity { get; set; }
 
 
         public bool IsActive { get; set; } = true;

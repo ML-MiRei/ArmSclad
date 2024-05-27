@@ -9,6 +9,6 @@
         public List<ProductEntity> Products { get; set; }
 
         //цена за заказ
-        public double Price => Products.Sum(p => p.AllPrice);
+        public double? Price => Products.Sum(p => p.AllPrice);
     }
 }
