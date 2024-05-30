@@ -4,14 +4,14 @@
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public double? NumberPackagesOnStorage { get; set; } = null;
+        public double? NumberPackages { get; set; } = null;
         public double? NumberPiecesInPackage { get; set; } = null;
 
         //занимаемое пространство одной упаковкой
         public double? SpaceOccupied { get; set; } = null;
 
         //всё занимаемое пространство
-        public double? AllSpaceOccupied => SpaceOccupied * NumberPackagesOnStorage;
+        public double? AllSpaceOccupied => SpaceOccupied * NumberPackages;
 
         //цена за единицу товара
         public double? Price { get; set; } = null;
@@ -20,7 +20,7 @@
         public double? PricePackage => Price * NumberPiecesInPackage;
 
         //цена за весь товар на складе
-        public double? AllPrice => PricePackage * NumberPackagesOnStorage;
+        public double? AllPrice => PricePackage * NumberPackages;
 
     }
 }

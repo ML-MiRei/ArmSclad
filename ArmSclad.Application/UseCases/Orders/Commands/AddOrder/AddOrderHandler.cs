@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ArmSclad.Domain.UseCases.Orders.Commands.AddOrder
 {
-    internal class AddOrderHandler(IOrdersRepository ordersRepository) : IRequestHandler<AddOrderCommand, int>
+    public class AddOrderHandler(IOrdersRepository ordersRepository) : IRequestHandler<AddOrderCommand, int>
     {
         public Task<int> Handle(AddOrderCommand request, CancellationToken cancellationToken)
         {

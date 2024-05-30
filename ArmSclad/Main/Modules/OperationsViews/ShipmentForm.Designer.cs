@@ -33,11 +33,10 @@
             label2 = new Label();
             CloseButton = new Button();
             panel2 = new Panel();
-            ProductsList = new DataGridView();
-            idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            nameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            Amount = new DataGridViewTextBoxColumn();
-            productEntityBindingSource = new BindingSource(components);
+            ProductsList = new ListView();
+            columnHeader1 = new ColumnHeader();
+            columnHeader2 = new ColumnHeader();
+            columnHeader3 = new ColumnHeader();
             CancelButton = new Button();
             CompleteButton = new Button();
             SelectProduct = new Button();
@@ -45,11 +44,15 @@
             label3 = new Label();
             NameClient = new Label();
             label1 = new Label();
+            productEntityBindingSource = new BindingSource(components);
             productBindingSource = new BindingSource(components);
             shipmentFormBindingSource = new BindingSource(components);
+            panel3 = new Panel();
+            panel4 = new Panel();
+            panel5 = new Panel();
+            panel6 = new Panel();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ProductsList).BeginInit();
             ((System.ComponentModel.ISupportInitialize)productEntityBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)productBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)shipmentFormBindingSource).BeginInit();
@@ -61,9 +64,9 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(CloseButton);
             panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
+            panel1.Location = new Point(10, 10);
             panel1.Name = "panel1";
-            panel1.Size = new Size(517, 52);
+            panel1.Size = new Size(518, 52);
             panel1.TabIndex = 0;
             // 
             // label2
@@ -101,51 +104,35 @@
             panel2.Controls.Add(NameClient);
             panel2.Controls.Add(label1);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 52);
+            panel2.Location = new Point(10, 62);
             panel2.Name = "panel2";
-            panel2.Size = new Size(517, 398);
+            panel2.Size = new Size(518, 388);
             panel2.TabIndex = 1;
             // 
             // ProductsList
             // 
-            ProductsList.AutoGenerateColumns = false;
-            ProductsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ProductsList.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nameDataGridViewTextBoxColumn, Amount });
-            ProductsList.DataSource = productEntityBindingSource;
-            ProductsList.Location = new Point(34, 123);
+            ProductsList.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+            ProductsList.GridLines = true;
+            ProductsList.Location = new Point(34, 127);
             ProductsList.Name = "ProductsList";
-            ProductsList.RowHeadersWidth = 51;
-            ProductsList.Size = new Size(430, 188);
-            ProductsList.TabIndex = 8;
+            ProductsList.Size = new Size(430, 176);
+            ProductsList.TabIndex = 9;
+            ProductsList.UseCompatibleStateImageBehavior = false;
+            ProductsList.View = View.Details;
             // 
-            // idDataGridViewTextBoxColumn
+            // columnHeader1
             // 
-            idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            idDataGridViewTextBoxColumn.HeaderText = "Id";
-            idDataGridViewTextBoxColumn.MinimumWidth = 6;
-            idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            idDataGridViewTextBoxColumn.ReadOnly = true;
-            idDataGridViewTextBoxColumn.Width = 125;
+            columnHeader1.Text = "ID";
             // 
-            // nameDataGridViewTextBoxColumn
+            // columnHeader2
             // 
-            nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            nameDataGridViewTextBoxColumn.MinimumWidth = 6;
-            nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            nameDataGridViewTextBoxColumn.ReadOnly = true;
-            nameDataGridViewTextBoxColumn.Width = 125;
+            columnHeader2.Text = "Название";
+            columnHeader2.Width = 200;
             // 
-            // Amount
+            // columnHeader3
             // 
-            Amount.HeaderText = "Количество";
-            Amount.MinimumWidth = 6;
-            Amount.Name = "Amount";
-            Amount.Width = 125;
-            // 
-            // productEntityBindingSource
-            // 
-            productEntityBindingSource.DataSource = typeof(Core.Entities.ProductEntity);
+            columnHeader3.Text = "Количество";
+            columnHeader3.Width = 120;
             // 
             // CancelButton
             // 
@@ -229,6 +216,10 @@
             label1.TabIndex = 0;
             label1.Text = "Клиент:";
             // 
+            // productEntityBindingSource
+            // 
+            productEntityBindingSource.DataSource = typeof(Core.Entities.ProductEntity);
+            // 
             // productBindingSource
             // 
             productBindingSource.DataSource = typeof(Infrastructure.Database.Model.Product);
@@ -237,13 +228,53 @@
             // 
             shipmentFormBindingSource.DataSource = typeof(ShipmentForm);
             // 
+            // panel3
+            // 
+            panel3.BackColor = Color.FromArgb(0, 0, 64);
+            panel3.Dock = DockStyle.Right;
+            panel3.Location = new Point(528, 10);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(10, 440);
+            panel3.TabIndex = 2;
+            // 
+            // panel4
+            // 
+            panel4.BackColor = Color.FromArgb(0, 0, 64);
+            panel4.Dock = DockStyle.Left;
+            panel4.Location = new Point(0, 10);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(10, 440);
+            panel4.TabIndex = 3;
+            // 
+            // panel5
+            // 
+            panel5.BackColor = Color.FromArgb(0, 0, 64);
+            panel5.Dock = DockStyle.Top;
+            panel5.Location = new Point(0, 0);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(538, 10);
+            panel5.TabIndex = 4;
+            // 
+            // panel6
+            // 
+            panel6.BackColor = Color.FromArgb(0, 0, 64);
+            panel6.Dock = DockStyle.Bottom;
+            panel6.Location = new Point(10, 440);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(518, 10);
+            panel6.TabIndex = 5;
+            // 
             // ShipmentForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(517, 450);
+            ClientSize = new Size(538, 450);
+            Controls.Add(panel6);
             Controls.Add(panel2);
             Controls.Add(panel1);
+            Controls.Add(panel3);
+            Controls.Add(panel4);
+            Controls.Add(panel5);
             FormBorderStyle = FormBorderStyle.None;
             Name = "ShipmentForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -252,7 +283,6 @@
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)ProductsList).EndInit();
             ((System.ComponentModel.ISupportInitialize)productEntityBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)productBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)shipmentFormBindingSource).EndInit();
@@ -272,12 +302,16 @@
         private Button CancelButton;
         private Button CompleteButton;
         private Label label2;
-        private DataGridView ProductsList;
-        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn Amount;
         private BindingSource productBindingSource;
         private BindingSource shipmentFormBindingSource;
         private BindingSource productEntityBindingSource;
+        private ListView ProductsList;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
+        private Panel panel3;
+        private Panel panel4;
+        private Panel panel5;
+        private Panel panel6;
     }
 }

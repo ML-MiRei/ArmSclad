@@ -47,7 +47,21 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 ClosingTime = s.ClosingTime,
                 OpeningTime = s.OpeningTime,
                 Id = s.Id,
-                Name = s.Name
+                Name = s.Name,
+                Products = db.DbContext.StoragesProducts
+                .Where(sp => sp.StorageId == s.Id)
+                .Join(db.DbContext.Products, sp => sp.ProductId, p => p.Id, (sp, p) =>
+                    new ProductEntity
+                    {
+                        Price = p.Price,
+                        Description = p.Description,
+                        Name = p.Name,
+                        SpaceOccupied = p.SpaceOccupied,
+                        Id = p.Id,
+                        NumberPackages = sp.Amount,
+                        NumberPiecesInPackage = p.NumberPiecesInPackage
+                    }).ToList()
+
             }).Skip(from).Take(to).ToList();
         }
 

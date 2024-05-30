@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArmSclad.Domain", "ArmSclad
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArmSclad.Infrastructure", "ArmSclad.Infrastructure\ArmSclad.Infrastructure.csproj", "{060ACEB0-23A5-4C61-87BC-1521D185F291}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D609D1FE-8483-4BBB-A260-7C09295CEBED}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{060ACEB0-23A5-4C61-87BC-1521D185F291}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{060ACEB0-23A5-4C61-87BC-1521D185F291}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{060ACEB0-23A5-4C61-87BC-1521D185F291}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D609D1FE-8483-4BBB-A260-7C09295CEBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D609D1FE-8483-4BBB-A260-7C09295CEBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D609D1FE-8483-4BBB-A260-7C09295CEBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D609D1FE-8483-4BBB-A260-7C09295CEBED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -36,29 +36,27 @@
             label1 = new Label();
             CloseButton = new Button();
             panel6 = new Panel();
+            ProductsList = new ListView();
+            columnHeader1 = new ColumnHeader();
+            columnHeader2 = new ColumnHeader();
+            columnHeader3 = new ColumnHeader();
             CancelButton = new Button();
             CompleteButton = new Button();
             SelectProducts = new Button();
             groupBox1 = new GroupBox();
             checkBox2 = new CheckBox();
             checkBox1 = new CheckBox();
-            ProductsList = new DataGridView();
             label2 = new Label();
-            ID = new DataGridViewTextBoxColumn();
-            Name = new DataGridViewTextBoxColumn();
-            NumberPackagesOnStorage = new DataGridViewTextBoxColumn();
-            Amount = new DataGridViewTextBoxColumn();
             panel5.SuspendLayout();
             panel6.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ProductsList).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(0, 0, 64);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(671, 0);
+            panel1.Location = new Point(555, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(10, 586);
             panel1.TabIndex = 0;
@@ -78,7 +76,7 @@
             panel3.Dock = DockStyle.Bottom;
             panel3.Location = new Point(10, 576);
             panel3.Name = "panel3";
-            panel3.Size = new Size(661, 10);
+            panel3.Size = new Size(545, 10);
             panel3.TabIndex = 2;
             // 
             // panel4
@@ -87,7 +85,7 @@
             panel4.Dock = DockStyle.Top;
             panel4.Location = new Point(10, 0);
             panel4.Name = "panel4";
-            panel4.Size = new Size(661, 10);
+            panel4.Size = new Size(545, 10);
             panel4.TabIndex = 3;
             // 
             // panel5
@@ -97,7 +95,7 @@
             panel5.Dock = DockStyle.Top;
             panel5.Location = new Point(10, 10);
             panel5.Name = "panel5";
-            panel5.Size = new Size(661, 43);
+            panel5.Size = new Size(545, 43);
             panel5.TabIndex = 4;
             // 
             // label1
@@ -115,7 +113,7 @@
             CloseButton.FlatAppearance.BorderSize = 0;
             CloseButton.FlatStyle = FlatStyle.Flat;
             CloseButton.ForeColor = Color.White;
-            CloseButton.Location = new Point(595, 0);
+            CloseButton.Location = new Point(478, 1);
             CloseButton.Name = "CloseButton";
             CloseButton.Size = new Size(66, 42);
             CloseButton.TabIndex = 0;
@@ -125,17 +123,43 @@
             // 
             // panel6
             // 
+            panel6.Controls.Add(ProductsList);
             panel6.Controls.Add(CancelButton);
             panel6.Controls.Add(CompleteButton);
             panel6.Controls.Add(SelectProducts);
             panel6.Controls.Add(groupBox1);
-            panel6.Controls.Add(ProductsList);
             panel6.Controls.Add(label2);
             panel6.Dock = DockStyle.Fill;
             panel6.Location = new Point(10, 53);
             panel6.Name = "panel6";
-            panel6.Size = new Size(661, 523);
+            panel6.Size = new Size(545, 523);
             panel6.TabIndex = 5;
+            // 
+            // ProductsList
+            // 
+            ProductsList.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+            ProductsList.FullRowSelect = true;
+            ProductsList.GridLines = true;
+            ProductsList.Location = new Point(28, 78);
+            ProductsList.Name = "ProductsList";
+            ProductsList.Size = new Size(473, 245);
+            ProductsList.TabIndex = 6;
+            ProductsList.UseCompatibleStateImageBehavior = false;
+            ProductsList.View = View.Details;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "ID";
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "Название";
+            columnHeader2.Width = 200;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "Кол-во";
+            columnHeader3.Width = 200;
             // 
             // CancelButton
             // 
@@ -143,9 +167,9 @@
             CancelButton.FlatAppearance.BorderSize = 0;
             CancelButton.FlatStyle = FlatStyle.Flat;
             CancelButton.ForeColor = Color.White;
-            CancelButton.Location = new Point(340, 441);
+            CancelButton.Location = new Point(288, 441);
             CancelButton.Name = "CancelButton";
-            CancelButton.Size = new Size(261, 29);
+            CancelButton.Size = new Size(213, 29);
             CancelButton.TabIndex = 5;
             CancelButton.Text = "отмена";
             CancelButton.UseVisualStyleBackColor = false;
@@ -158,7 +182,7 @@
             CompleteButton.ForeColor = Color.White;
             CompleteButton.Location = new Point(28, 441);
             CompleteButton.Name = "CompleteButton";
-            CompleteButton.Size = new Size(261, 29);
+            CompleteButton.Size = new Size(213, 29);
             CompleteButton.TabIndex = 4;
             CompleteButton.Text = "сохранить";
             CompleteButton.UseVisualStyleBackColor = false;
@@ -184,7 +208,7 @@
             groupBox1.Controls.Add(checkBox1);
             groupBox1.Location = new Point(28, 329);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(573, 79);
+            groupBox1.Size = new Size(473, 79);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Дополнительные действия";
@@ -209,16 +233,6 @@
             checkBox1.Text = "Контроль качества";
             checkBox1.UseVisualStyleBackColor = true;
             // 
-            // ProductsList
-            // 
-            ProductsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ProductsList.Columns.AddRange(new DataGridViewColumn[] { ID, Name, NumberPackagesOnStorage, Amount });
-            ProductsList.Location = new Point(28, 70);
-            ProductsList.Name = "ProductsList";
-            ProductsList.RowHeadersWidth = 51;
-            ProductsList.Size = new Size(573, 230);
-            ProductsList.TabIndex = 1;
-            // 
             // label2
             // 
             label2.AutoSize = true;
@@ -228,43 +242,12 @@
             label2.TabIndex = 0;
             label2.Text = "Доставленные продукты:";
             // 
-            // ID
-            // 
-            ID.HeaderText = "ID";
-            ID.MinimumWidth = 6;
-            ID.Name = "ID";
-            ID.ReadOnly = true;
-            ID.Width = 125;
-            // 
-            // Name
-            // 
-            Name.HeaderText = "Название";
-            Name.MinimumWidth = 6;
-            Name.Name = "Name";
-            Name.ReadOnly = true;
-            Name.Width = 125;
-            // 
-            // NumberPackagesOnStorage
-            // 
-            NumberPackagesOnStorage.HeaderText = "Кол-во на складе";
-            NumberPackagesOnStorage.MinimumWidth = 6;
-            NumberPackagesOnStorage.Name = "NumberPackagesOnStorage";
-            NumberPackagesOnStorage.ReadOnly = true;
-            NumberPackagesOnStorage.Width = 125;
-            // 
-            // Amount
-            // 
-            Amount.HeaderText = "Выбранное кол-во";
-            Amount.MinimumWidth = 6;
-            Amount.Name = "Amount";
-            Amount.Width = 125;
-            // 
             // AcceptanceForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(681, 586);
+            ClientSize = new Size(565, 586);
             Controls.Add(panel6);
             Controls.Add(panel5);
             Controls.Add(panel4);
@@ -272,6 +255,8 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
+            Name = "AcceptanceForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "AcceptanceForm";
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
@@ -279,7 +264,6 @@
             panel6.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)ProductsList).EndInit();
             ResumeLayout(false);
         }
 
@@ -296,14 +280,13 @@
         private GroupBox groupBox1;
         private CheckBox checkBox2;
         private CheckBox checkBox1;
-        private DataGridView ProductsList;
         private Label label2;
         private Button SelectProducts;
         private Button CancelButton;
         private Button CompleteButton;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn Name;
-        private DataGridViewTextBoxColumn NumberPackagesOnStorage;
-        private DataGridViewTextBoxColumn Amount;
+        private ListView ProductsList;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
     }
 }

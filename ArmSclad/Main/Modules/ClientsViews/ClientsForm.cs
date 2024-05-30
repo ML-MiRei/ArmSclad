@@ -12,7 +12,7 @@ namespace ArmSclad.UI.Main.Modules.ClientsViews
     {
         private static IMediator _mediator;
         private int _pageNumber = 0;
-        private int _productsOnPage = 17;
+        private int _clientsOnPage = 17;
         private List<ClientEntity> _clients;
 
         public ClientsForm(IMediator mediator)
@@ -126,8 +126,8 @@ namespace ArmSclad.UI.Main.Modules.ClientsViews
 
             _clients = _mediator.Send(new GetClientsQuery
             {
-                From = _pageNumber * _productsOnPage,
-                To = _productsOnPage,
+                From = _pageNumber * _clientsOnPage,
+                To = _clientsOnPage,
             }).Result;
 
             foreach (var client in _clients)

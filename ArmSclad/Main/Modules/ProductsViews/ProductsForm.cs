@@ -23,20 +23,26 @@ namespace ArmSclad.UI.Main.Modules.ProductsViews
 
             _mediator = mediator;
 
-            ProductsList.SelectedIndexChanged += ProductsList_SelectedIndexChanged;
             UpdateMode.CheckedChanged += UpdateMode_CheckedChanged;
-
             LoadData();
         }
 
         private void UpdateMode_CheckedChanged(object? sender, EventArgs e)
         {
             ProductsList.SelectedItems.Clear();
+            if (UpdateMode.Checked)
+            {
+                ProductsList.SelectedIndexChanged += ProductsList_SelectedIndexChanged;
+            }
+            else
+            {
+                ProductsList.SelectedIndexChanged -= ProductsList_SelectedIndexChanged;
+            }
         }
 
         private void ProductsList_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (UpdateMode.Checked && ProductsList.SelectedItems.Count != 0)
+            if (ProductsList.SelectedItems.Count != 0)
             {
                 ProductEntity productEntity = _products[ProductsList.Items.IndexOf(ProductsList.SelectedItems[0])];
                 InfoProductForm infoStorageForm = new InfoProductForm(ref productEntity);

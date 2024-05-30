@@ -1,9 +1,9 @@
-﻿using ArmSclad.Domain.Interfaces.Services.AuthorizationService;
-using ArmSclad.Core.Entities;
+﻿using ArmSclad.Core.Entities;
 using ArmSclad.Core.Enums;
 using ArmSclad.Core.Exceptions;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Database.Model;
+using ArmSclad.Domain.Interfaces.Services;
 
 namespace ArmSclad.Infrastructure.Implementations.Services
 {

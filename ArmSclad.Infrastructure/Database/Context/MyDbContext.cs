@@ -29,6 +29,7 @@ namespace ArmSclad.Infrastructure.Database.Context
             modelBuilder.Entity<OrderProduct>().HasKey(p => new { p.OrderId, p.ProductId });
             modelBuilder.Entity<StorageProduct>().HasKey(s => new { s.StorageId, s.ProductId });
             modelBuilder.Entity<OperationProduct>().HasKey(o => new { o.ProductId, o.OperationId });
+            modelBuilder.Entity<Operation>().HasKey(o => new {o.Id, o.Created});
 
             modelBuilder.Entity<Client>().ToTable(tb => tb.HasTrigger("update_client_trigger"));
             modelBuilder.Entity<Storage>().ToTable(tb => tb.HasTrigger("update_storage_trigger"));
@@ -46,10 +47,10 @@ namespace ArmSclad.Infrastructure.Database.Context
 
             if (!optionsBuilder.IsConfigured)
             {
+                // строка подключения к базе данных
                 optionsBuilder.UseSqlServer("Server=DESKTOP-E86S7QI;Database=ArmStorage;Trusted_Connection=True;TrustServerCertificate=true;MultipleActiveResultSets=true;");
                 optionsBuilder.EnableSensitiveDataLogging();
             }
-
 
             base.OnConfiguring(optionsBuilder);
         }

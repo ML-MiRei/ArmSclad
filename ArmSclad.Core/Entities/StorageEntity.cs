@@ -12,6 +12,9 @@
         //занятое место
         public double? OccupiedCapacity =>  Products.Sum(p => p.AllSpaceOccupied);
 
+        //свободное место
+        public double? FreeCapacity =>  Capacity - OccupiedCapacity;
+
         //проверка вместимости ряда продуктов
         public bool IsEnoughCapacity(params ProductEntity[] products)
         {

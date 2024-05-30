@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Operations.Commands.AddOperation
     {
         public Task<int> Handle(AddOperationCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => operationsRepository.Add(request.Operation));
+            return operationsRepository.Add(request.Operation);
         }
     }
 }

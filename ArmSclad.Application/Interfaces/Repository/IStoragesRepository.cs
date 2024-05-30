@@ -1,6 +1,5 @@
 ﻿using ArmSclad.Core.Entities;
 using ArmSclad.Domain.FiltersModels;
-using ArmSclad.Domain.UseCases.Clients.Queries.GetClients;
 
 namespace ArmSclad.Domain.Interfaces.Repository
 {

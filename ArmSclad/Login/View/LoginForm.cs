@@ -48,7 +48,7 @@ namespace ArmSclad
 
         private void CloseForm(object sender, EventArgs e)
         {
-            Close();
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

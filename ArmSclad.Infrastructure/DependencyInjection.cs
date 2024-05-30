@@ -1,5 +1,5 @@
 ﻿using ArmSclad.Domain.Interfaces.Repository;
-using ArmSclad.Domain.Interfaces.Services.AuthorizationService;
+using ArmSclad.Domain.Interfaces.Services;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Implementations.Repository;
 using ArmSclad.Infrastructure.Implementations.Services;
@@ -18,6 +18,7 @@ namespace ArmSclad.Infrastructure
                 .AddTransient<IOperationsRepository, OperationsRepository>()
                 .AddTransient<IProductsRepository, ProductsRepository>()
                 .AddTransient<IStoragesRepository, StoragesRepository>()
+                .AddTransient<IOrdersRepository, OrdersRepository>()
                 .AddTransient<IAuthorizationService, AuthorizationService>();
 
             return services;

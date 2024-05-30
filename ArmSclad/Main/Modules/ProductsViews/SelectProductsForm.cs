@@ -1,6 +1,7 @@
 ﻿using ArmSclad.Core.Entities;
 using ArmSclad.Domain.UseCases.Products.Queries.GetProducts;
 using ArmSclad.Domain.UseCases.Products.Queries.GetProductsByStorage;
+using ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews;
 using MediatR;
 
 namespace ArmSclad.UI.Main.Modules.ProductsViews
@@ -12,33 +13,62 @@ namespace ArmSclad.UI.Main.Modules.ProductsViews
         private int _productsOnPage = 17;
         private int? _storageId;
         private List<ProductEntity> _products;
-        private List<ProductEntity> _selectedProducts;
-        private List<ProductEntity> _selectedProductsOnPage = new List<ProductEntity>();
+        private Dictionary<ProductEntity, float> _selectedProducts;
+        private bool _indicatorDifference;
 
-        public SelectProductsForm(IMediator mediator, ref List<ProductEntity> selectedProducts, int? storageId = null)
+        public SelectProductsForm(IMediator mediator, ref Dictionary<ProductEntity, float> selectedProducts, int? storageId = null, bool indicatorDifference = true)
         {
             InitializeComponent();
 
             _mediator = mediator;
             _selectedProducts = selectedProducts;
             _storageId = storageId;
+            _indicatorDifference = indicatorDifference;
 
-            ProductsList.SelectedIndexChanged += ProductsList_SelectedIndexChanged;
+            SelectMode.CheckedChanged += SelectMode_CheckedChanged;
 
             LoadData();
         }
 
+        private void SelectMode_CheckedChanged(object? sender, EventArgs e)
+        {
+            ProductsList.SelectedItems.Clear();
+
+            if (SelectMode.Checked)
+            {
+                ProductsList.SelectedIndexChanged += ProductsList_SelectedIndexChanged;
+            }
+            else
+            {
+                ProductsList.SelectedIndexChanged -= ProductsList_SelectedIndexChanged;
+            }
+        }
+
         private void ProductsList_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            foreach (ListViewItem item in ProductsList.SelectedItems)
+            if (ProductsList.SelectedItems.Count != 0)
             {
-                if (!_selectedProductsOnPage.Contains(_products[item.Index]))
-                    _selectedProductsOnPage.Add(_products[item.Index]);
-            }
-            foreach (var item in _selectedProductsOnPage)
-            {
-                if (!ProductsList.SelectedItems.Contains(ProductsList.Items[_products.IndexOf(item)]))
-                    _selectedProductsOnPage.Remove(item);
+                InputAmount inputAmount = new InputAmount();
+
+                if (inputAmount.ShowDialog() == DialogResult.OK)
+                {
+                    if (inputAmount.Amount == 0)
+                    {
+                        ProductsList.SelectedItems[0].SubItems[7].Text = String.Empty;
+                        _selectedProducts.Remove(_products[ProductsList.SelectedItems[0].Index]);
+                        return;
+                    }
+
+                    if (_indicatorDifference && inputAmount.Amount > _products[ProductsList.SelectedItems[0].Index].NumberPackages)
+                    {
+                        MessageBox.Show("Введённое количество превышает доступное", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    _selectedProducts.Add(_products[ProductsList.SelectedItems[0].Index], inputAmount.Amount);
+                    ProductsList.SelectedItems[0].SubItems[7].Text = inputAmount.Amount.ToString();
+
+                }
             }
         }
 
@@ -61,26 +91,14 @@ namespace ArmSclad.UI.Main.Modules.ProductsViews
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            Close();
+            DialogResult = DialogResult.Cancel;
         }
 
-
-        private void SaveData()
-        {
-            foreach (var item in _selectedProductsOnPage)
-            {
-                if (!_selectedProducts.Contains(item))
-                    _selectedProducts.Add(item);
-            }
-            foreach (var item in _selectedProducts)
-            {
-                if (!_selectedProductsOnPage.Contains(item))
-                    _selectedProducts.Remove(item);
-            }
-        }
 
         private void LoadData()
         {
+            ProductsList.Items.Clear();
+
             if (_storageId == null)
             {
                 _products = _mediator.Send(new GetProductsQuery
@@ -99,8 +117,6 @@ namespace ArmSclad.UI.Main.Modules.ProductsViews
                 }).Result;
             }
 
-            SaveData();
-
             foreach (var product in _products)
             {
                 ListViewItem item = new ListViewItem(new string[] {
@@ -108,15 +124,17 @@ namespace ArmSclad.UI.Main.Modules.ProductsViews
                     product.Name,
                     product.Description,
                     product.NumberPiecesInPackage + "",
-                    product.Price + "",
                     product.SpaceOccupied + "",
-                    product.PricePackage + ""
+                    product.NumberPackages + "",
+                    product.PricePackage + "",
+                    String.Empty
                 });
 
-
-                if (_selectedProducts.Select(p => p.Id).Contains(product.Id))
+                var prod = _selectedProducts.Keys.FirstOrDefault(p => p.Id == product.Id);
+                if (prod != default)
                 {
                     item.Selected = true;
+                    item.SubItems[7].Text = _selectedProducts[prod].ToString();
                 }
 
                 ProductsList.Items.Add(item);

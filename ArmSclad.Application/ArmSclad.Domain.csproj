@@ -14,8 +14,4 @@
     <ProjectReference Include="..\ArmSclad.Core\ArmSclad.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Employees\Commands\" />
-  </ItemGroup>
-
 </Project>

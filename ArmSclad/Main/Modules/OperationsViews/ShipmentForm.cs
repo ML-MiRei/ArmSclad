@@ -1,6 +1,5 @@
 ﻿using ArmSclad.Core.Entities;
-using ArmSclad.Domain.UseCases.Operations.Commands.AddOperation;
-using ArmSclad.UI.Common;
+using ArmSclad.Domain.Interfaces.Services;
 using ArmSclad.UI.Main.Modules.ClientsViews;
 using ArmSclad.UI.Main.Modules.ProductsViews;
 using MediatR;
@@ -10,25 +9,26 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews
     public partial class ShipmentForm : Form
     {
         private static IMediator _mediator;
+        private static IRequestService _requestService;
         private int _storageId;
-        private List<ProductEntity> _selectedProducts = new List<ProductEntity>();
+        private Dictionary<ProductEntity, float> _selectedProducts = new Dictionary<ProductEntity, float>();
         private ClientEntity _selectedClient;
 
 
-        public ShipmentForm(IMediator mediator, int storageId)
+        public ShipmentForm(IMediator mediator, IRequestService requestService, int storageId)
         {
             InitializeComponent();
 
             _mediator = mediator;
             _storageId = storageId;
+            _requestService = requestService;
 
-            ProductsList.DataSource = _selectedProducts;
             CancelButton.Click += CloseButton_Click;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void CompleteButton_Click(object sender, EventArgs e)
@@ -42,29 +42,8 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews
             var result = MessageBox.Show("Вы уверены, что хотите отправить заявку на отгрузку?", "", MessageBoxButtons.OKCancel);
             if (result == DialogResult.OK)
             {
-                TaskManager.AddTask(async () =>
-                            {
-                                try
-                                {
-                                    await _mediator.Send(new AddOperationCommand
-                                    {
-                                        Operation = new OperationEntity
-                                        {
-                                            CreatorId = Program.CurrentUser.Id,
-                                            Products = _selectedProducts,
-                                            TargetId = _selectedClient.Id,
-                                            Type = Core.Enums.OperationTypeEnum.Shipment,
-                                            StorageId = _storageId
-                                        }
-                                    });
-
-                                    MessageBox.Show("Заявка на отгрузку успешно отправлена");
-                                }
-                                catch (Exception)
-                                {
-                                    MessageBox.Show("Ошибка отправки заявки на отгрузку");
-                                }
-                            });
+                _requestService.SendRequestShipment(_selectedProducts, _storageId, _selectedClient.Id);
+                Close();
             }
 
         }
@@ -82,6 +61,34 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews
         {
             SelectProductsForm selectProductsForm = new SelectProductsForm(_mediator, ref _selectedProducts, _storageId);
             selectProductsForm.ShowDialog();
+
+            ProductsList.Items.Clear();
+
+            foreach (var product in _selectedProducts)
+            {
+                ProductsList.Items.Add(new ListViewItem(new string[]
+                {
+                    product.Key.Id.ToString(),
+                    product.Key.Name,
+                    product.Value.ToString()
+                }));
+            }
+
+        }
+
+        private void LoadData()
+        {
+            ProductsList.Items.Clear();
+
+            foreach (var product in _selectedProducts)
+            {
+                ProductsList.Items.Add(new ListViewItem(new string[]
+                {
+                    product.Key.Id.ToString(),
+                    product.Key.Name,
+                    product.Value.ToString()
+                }));
+            }
         }
 
     }

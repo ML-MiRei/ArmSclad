@@ -1,5 +1,8 @@
 ﻿using ArmSclad.UI.Common;
 using ArmSclad.UI.Main.Modules.ClientsViews;
+using ArmSclad.UI.Main.Modules.OperationsViews;
+using ArmSclad.UI.Main.Modules.OperationsWithProductsViews;
+using ArmSclad.UI.Main.Modules.OrdersView;
 using ArmSclad.UI.Main.Modules.ProductsViews;
 using ArmSclad.UI.Main.Modules.StoragesViews;
 using System.ComponentModel;
@@ -10,31 +13,78 @@ namespace ArmSclad.UI.Main
     public partial class MainForm : Form
     {
         private static Form _activeForm;
+        private static StoragesForm _storagesForm;
+        private static ProductsForm _productsForm;
+        private static ClientsForm _clientsForm;
+        private static ObserveOperationsForm _observeOperationsForm;
+        private static OperationsWithProductsForm _operationsWithProductsForm;
+        private static OrdersForm _ordersForm;
+        private static OperationsEmployeeForm _operationsEmployeeForm;
 
-        public MainForm(StoragesForm storagesForm, ProductsForm productsForm, ClientsForm clientsForm)
+
+        public MainForm(StoragesForm storagesForm, ProductsForm productsForm,
+            ClientsForm clientsForm, ObserveOperationsForm observeOperationsForm,
+            OperationsWithProductsForm operationsWithProductsForm, OrdersForm ordersForm,
+            OperationsEmployeeForm operationsEmployeeForm)
         {
             InitializeComponent();
 
-            PageContent.Controls.Add(storagesForm);
-           
-            ToProductsPageButton.Command = new NavigateCommand(this);
-            ToProductsPageButton.CommandParameter = productsForm;
-            ToStoragePageButton.Command = new NavigateCommand(this);
-            ToStoragePageButton.CommandParameter = storagesForm;
-            ToClientsPageButton.Command = new NavigateCommand(this);
-            ToClientsPageButton.CommandParameter = clientsForm;
-
-            _activeForm = storagesForm;
-            storagesForm.Show();
+            _storagesForm = storagesForm;
+            _operationsWithProductsForm = operationsWithProductsForm;
+            _ordersForm = ordersForm;
+            _clientsForm = clientsForm;
+            _observeOperationsForm = observeOperationsForm;
+            _productsForm = productsForm;
+            _operationsEmployeeForm = operationsEmployeeForm;
 
         }
 
-        protected override void OnActivated(EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
             UserName.Text = Program.CurrentUser.FullName;
-            base.OnActivated(e);
+
+            if (Program.CurrentUser.Role == Core.Enums.EmployeeRoleEnum.Operator)
+            {
+                PageContent.Controls.Add(_storagesForm);
+
+                ToProductsPageButton.Command = new NavigateCommand(this);
+                ToProductsPageButton.CommandParameter = _productsForm;
+
+                ToStoragePageButton.Command = new NavigateCommand(this);
+                ToStoragePageButton.CommandParameter = _storagesForm;
+
+                ToClientsPageButton.Command = new NavigateCommand(this);
+                ToClientsPageButton.CommandParameter = _clientsForm;
+
+                ToOperationsPageButton.Command = new NavigateCommand(this);
+                ToOperationsPageButton.CommandParameter = _observeOperationsForm;
+
+                ToOperationsWithProductsPageButton.Command = new NavigateCommand(this);
+                ToOperationsWithProductsPageButton.CommandParameter = _operationsWithProductsForm;
+
+                ToOrdersPageButton.Command = new NavigateCommand(this);
+                ToOrdersPageButton.CommandParameter = _ordersForm;
+
+                _activeForm = _storagesForm;
+                _activeForm.Show();
+            }
+            else
+            {
+                ToProductsPageButton.Visible = false;
+                ToStoragePageButton.Visible = false;
+                ToClientsPageButton.Visible = false;
+                ToOperationsWithProductsPageButton.Visible = false;
+                ToOrdersPageButton.Visible = false;
+                ToOperationsPageButton.Visible = false;
+
+                PageContent.Controls.Add(_operationsEmployeeForm);
+                _operationsEmployeeForm.Show();
+            }
+
+            base.OnShown(e);
         }
 
+      
         protected override void OnClosing(CancelEventArgs e)
         {
             TaskManager.WaitAllTask();

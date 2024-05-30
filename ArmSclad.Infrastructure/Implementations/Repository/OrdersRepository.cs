@@ -1,13 +1,8 @@
-﻿using ArmSclad.Domain.Interfaces.Repository;
-using ArmSclad.Core.Entities;
+﻿using ArmSclad.Core.Entities;
 using ArmSclad.Core.Exceptions;
+using ArmSclad.Domain.Interfaces.Repository;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Database.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
@@ -19,10 +14,22 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             {
                 Address = orderEntity.Address,
                 DeliveryTime = orderEntity.DeliveryTime,
-                ClientId = orderEntity.ClientId
+                ClientId = orderEntity.Client.Id
             };
             db.DbContext.Add(order);
             db.DbContext.SaveChanges();
+
+            foreach (var product in orderEntity.Products)
+            {
+                db.DbContext.OrdersProducts.Add(new OrderProduct
+                {
+                    Amount = product.NumberPackages.Value,
+                    OrderId = order.Id,
+                    ProductId = product.Id
+                });
+            }
+            db.DbContext.SaveChanges();
+
             return order.Id;
         }
 
@@ -44,11 +51,26 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             {
                 DeliveryTime = or.DeliveryTime,
                 Address = or.Address,
-                ClientId = or.ClientId,
-                Id = or.Id
-              
+                Client = new ClientEntity
+                {
+                    Id = db.DbContext.Clients.First(c => c.Id == or.ClientId).Id,
+                },
+                Id = or.Id,
+                Products = db.DbContext.OrdersProducts
+                .Where(op => op.OrderId == or.Id)
+                .Join(db.DbContext.Products, op => op.ProductId, p => p.Id, (op, p) => new ProductEntity
+                {
+                    Price = p.Price,
+                    NumberPackages = op.Amount,
+                    Name = p.Name,
+                    NumberPiecesInPackage = p.NumberPiecesInPackage,
+                }).ToList()
+
             }).Skip(from).Take(to).ToList();
         }
+
+
+
 
         public void Update(OrderEntity orderEntity)
         {
@@ -58,7 +80,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             {
                 order.Address = orderEntity.Address;
                 order.DeliveryTime = orderEntity.DeliveryTime;
-                order.ClientId = orderEntity.ClientId;
+                order.ClientId = orderEntity.Client.Id;
 
                 db.DbContext.Update(order);
                 db.DbContext.SaveChanges();

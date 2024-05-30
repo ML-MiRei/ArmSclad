@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            ToOrdersPageButton = new Button();
+            ToOperationsWithProductsPageButton = new Button();
             Logout = new Button();
             UserName = new Label();
             pictureBox1 = new PictureBox();
-            button4 = new Button();
+            ToOperationsPageButton = new Button();
             ToClientsPageButton = new Button();
             ToProductsPageButton = new Button();
             ToStoragePageButton = new Button();
@@ -49,10 +51,12 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(0, 0, 64);
+            panel1.Controls.Add(ToOrdersPageButton);
+            panel1.Controls.Add(ToOperationsWithProductsPageButton);
             panel1.Controls.Add(Logout);
             panel1.Controls.Add(UserName);
             panel1.Controls.Add(pictureBox1);
-            panel1.Controls.Add(button4);
+            panel1.Controls.Add(ToOperationsPageButton);
             panel1.Controls.Add(ToClientsPageButton);
             panel1.Controls.Add(ToProductsPageButton);
             panel1.Controls.Add(ToStoragePageButton);
@@ -61,6 +65,34 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(165, 802);
             panel1.TabIndex = 0;
+            // 
+            // ToOrdersPageButton
+            // 
+            ToOrdersPageButton.Anchor = AnchorStyles.None;
+            ToOrdersPageButton.Cursor = Cursors.Hand;
+            ToOrdersPageButton.FlatAppearance.BorderSize = 0;
+            ToOrdersPageButton.FlatStyle = FlatStyle.Flat;
+            ToOrdersPageButton.ForeColor = Color.White;
+            ToOrdersPageButton.Location = new Point(0, 462);
+            ToOrdersPageButton.Name = "ToOrdersPageButton";
+            ToOrdersPageButton.Size = new Size(162, 59);
+            ToOrdersPageButton.TabIndex = 8;
+            ToOrdersPageButton.Text = "заказы";
+            ToOrdersPageButton.UseVisualStyleBackColor = true;
+            // 
+            // ToOperationsWithProductsPageButton
+            // 
+            ToOperationsWithProductsPageButton.Anchor = AnchorStyles.None;
+            ToOperationsWithProductsPageButton.Cursor = Cursors.Hand;
+            ToOperationsWithProductsPageButton.FlatAppearance.BorderSize = 0;
+            ToOperationsWithProductsPageButton.FlatStyle = FlatStyle.Flat;
+            ToOperationsWithProductsPageButton.ForeColor = Color.White;
+            ToOperationsWithProductsPageButton.Location = new Point(0, 397);
+            ToOperationsWithProductsPageButton.Name = "ToOperationsWithProductsPageButton";
+            ToOperationsWithProductsPageButton.Size = new Size(162, 59);
+            ToOperationsWithProductsPageButton.TabIndex = 7;
+            ToOperationsWithProductsPageButton.Text = "операции с\r\nпродуктами";
+            ToOperationsWithProductsPageButton.UseVisualStyleBackColor = true;
             // 
             // Logout
             // 
@@ -97,19 +129,19 @@
             pictureBox1.TabIndex = 4;
             pictureBox1.TabStop = false;
             // 
-            // button4
+            // ToOperationsPageButton
             // 
-            button4.Anchor = AnchorStyles.None;
-            button4.Cursor = Cursors.Hand;
-            button4.FlatAppearance.BorderSize = 0;
-            button4.FlatStyle = FlatStyle.Flat;
-            button4.ForeColor = Color.White;
-            button4.Location = new Point(0, 332);
-            button4.Name = "button4";
-            button4.Size = new Size(162, 59);
-            button4.TabIndex = 3;
-            button4.Text = "button4";
-            button4.UseVisualStyleBackColor = true;
+            ToOperationsPageButton.Anchor = AnchorStyles.None;
+            ToOperationsPageButton.Cursor = Cursors.Hand;
+            ToOperationsPageButton.FlatAppearance.BorderSize = 0;
+            ToOperationsPageButton.FlatStyle = FlatStyle.Flat;
+            ToOperationsPageButton.ForeColor = Color.White;
+            ToOperationsPageButton.Location = new Point(0, 332);
+            ToOperationsPageButton.Name = "ToOperationsPageButton";
+            ToOperationsPageButton.Size = new Size(162, 59);
+            ToOperationsPageButton.TabIndex = 3;
+            ToOperationsPageButton.Text = "заявки";
+            ToOperationsPageButton.UseVisualStyleBackColor = true;
             // 
             // ToClientsPageButton
             // 
@@ -218,7 +250,7 @@
         #endregion
 
         private Panel panel1;
-        private Button button4;
+        private Button ToOperationsPageButton;
         private Button ToClientsPageButton;
         private Button ToProductsPageButton;
         private Button ToStoragePageButton;
@@ -229,5 +261,7 @@
         private Label UserName;
         private PictureBox pictureBox1;
         private Button Logout;
+        private Button ToOrdersPageButton;
+        private Button ToOperationsWithProductsPageButton;
     }
 }

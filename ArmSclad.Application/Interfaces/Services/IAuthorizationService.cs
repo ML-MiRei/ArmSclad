@@ -1,6 +1,6 @@
 ﻿using ArmSclad.Core.Entities;
 
-namespace ArmSclad.Domain.Interfaces.Services.AuthorizationService
+namespace ArmSclad.Domain.Interfaces.Services
 {
     public interface IAuthorizationService
     {

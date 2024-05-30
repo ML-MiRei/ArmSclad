@@ -44,8 +44,6 @@
             StoragesList = new ListView();
             StorageInfo = new Panel();
             AcceptanceButton = new Button();
-            QualityСontrolButton = new Button();
-            RepackagingButton = new Button();
             ShipmentButton = new Button();
             InventoryButton = new Button();
             DeleteButton = new Button();
@@ -109,10 +107,13 @@
             ClearFilterButton.BackColor = Color.FromArgb(0, 0, 64);
             ClearFilterButton.FlatAppearance.BorderSize = 0;
             ClearFilterButton.FlatStyle = FlatStyle.Flat;
-            ClearFilterButton.Location = new Point(1041, 50);
+            ClearFilterButton.Font = new Font("Segoe UI", 7.20000029F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            ClearFilterButton.ForeColor = Color.White;
+            ClearFilterButton.Location = new Point(1011, 50);
             ClearFilterButton.Name = "ClearFilterButton";
-            ClearFilterButton.Size = new Size(65, 23);
+            ClearFilterButton.Size = new Size(95, 23);
             ClearFilterButton.TabIndex = 34;
+            ClearFilterButton.Text = "очистить";
             ClearFilterButton.UseVisualStyleBackColor = false;
             ClearFilterButton.Click += ClearFilterButton_Click;
             // 
@@ -121,10 +122,13 @@
             FiltresButton.BackColor = Color.FromArgb(0, 0, 64);
             FiltresButton.FlatAppearance.BorderSize = 0;
             FiltresButton.FlatStyle = FlatStyle.Flat;
-            FiltresButton.Location = new Point(1041, 20);
+            FiltresButton.Font = new Font("Segoe UI", 7.20000029F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            FiltresButton.ForeColor = Color.White;
+            FiltresButton.Location = new Point(1011, 20);
             FiltresButton.Name = "FiltresButton";
-            FiltresButton.Size = new Size(65, 23);
+            FiltresButton.Size = new Size(95, 23);
             FiltresButton.TabIndex = 33;
+            FiltresButton.Text = "применить";
             FiltresButton.UseVisualStyleBackColor = false;
             // 
             // SearchWorkTime
@@ -231,8 +235,6 @@
             // 
             StorageInfo.BackColor = Color.White;
             StorageInfo.Controls.Add(AcceptanceButton);
-            StorageInfo.Controls.Add(QualityСontrolButton);
-            StorageInfo.Controls.Add(RepackagingButton);
             StorageInfo.Controls.Add(ShipmentButton);
             StorageInfo.Controls.Add(InventoryButton);
             StorageInfo.Controls.Add(DeleteButton);
@@ -264,40 +266,20 @@
             // AcceptanceButton
             // 
             AcceptanceButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            AcceptanceButton.Location = new Point(733, 519);
+            AcceptanceButton.Location = new Point(452, 519);
             AcceptanceButton.Name = "AcceptanceButton";
-            AcceptanceButton.Size = new Size(113, 73);
+            AcceptanceButton.Size = new Size(194, 73);
             AcceptanceButton.TabIndex = 31;
             AcceptanceButton.Text = "приём";
             AcceptanceButton.UseVisualStyleBackColor = true;
             AcceptanceButton.Click += AcceptanceButton_Click;
             // 
-            // QualityСontrolButton
-            // 
-            QualityСontrolButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            QualityСontrolButton.Location = new Point(596, 519);
-            QualityСontrolButton.Name = "QualityСontrolButton";
-            QualityСontrolButton.Size = new Size(113, 73);
-            QualityСontrolButton.TabIndex = 30;
-            QualityСontrolButton.Text = "контроль\r\nкачества";
-            QualityСontrolButton.UseVisualStyleBackColor = true;
-            // 
-            // RepackagingButton
-            // 
-            RepackagingButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            RepackagingButton.Location = new Point(461, 519);
-            RepackagingButton.Name = "RepackagingButton";
-            RepackagingButton.Size = new Size(113, 73);
-            RepackagingButton.TabIndex = 29;
-            RepackagingButton.Text = "переупаковка";
-            RepackagingButton.UseVisualStyleBackColor = true;
-            // 
             // ShipmentButton
             // 
             ShipmentButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            ShipmentButton.Location = new Point(317, 519);
+            ShipmentButton.Location = new Point(245, 519);
             ShipmentButton.Name = "ShipmentButton";
-            ShipmentButton.Size = new Size(113, 73);
+            ShipmentButton.Size = new Size(194, 73);
             ShipmentButton.TabIndex = 28;
             ShipmentButton.Text = "отгрузка";
             ShipmentButton.UseVisualStyleBackColor = true;
@@ -306,9 +288,9 @@
             // InventoryButton
             // 
             InventoryButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            InventoryButton.Location = new Point(176, 519);
+            InventoryButton.Location = new Point(652, 519);
             InventoryButton.Name = "InventoryButton";
-            InventoryButton.Size = new Size(113, 73);
+            InventoryButton.Size = new Size(194, 73);
             InventoryButton.TabIndex = 27;
             InventoryButton.Text = "инвентаризация";
             InventoryButton.UseVisualStyleBackColor = true;
@@ -425,10 +407,11 @@
             MovingButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             MovingButton.Location = new Point(45, 519);
             MovingButton.Name = "MovingButton";
-            MovingButton.Size = new Size(113, 73);
+            MovingButton.Size = new Size(194, 73);
             MovingButton.TabIndex = 9;
             MovingButton.Text = "перемещение\r\nпродуктов";
             MovingButton.UseVisualStyleBackColor = true;
+            MovingButton.Click += MovingButton_Click;
             // 
             // ShowEmployees
             // 
@@ -440,7 +423,7 @@
             ShowEmployees.Name = "ShowEmployees";
             ShowEmployees.Size = new Size(385, 44);
             ShowEmployees.TabIndex = 8;
-            ShowEmployees.Text = "информация о продуктах";
+            ShowEmployees.Text = "информация о сотрудниках";
             ShowEmployees.UseVisualStyleBackColor = false;
             // 
             // ShowProducts
@@ -453,7 +436,7 @@
             ShowProducts.Name = "ShowProducts";
             ShowProducts.Size = new Size(385, 44);
             ShowProducts.TabIndex = 7;
-            ShowProducts.Text = "информация о сотрудниках";
+            ShowProducts.Text = "информация о продуктах";
             ShowProducts.UseVisualStyleBackColor = false;
             // 
             // ProgressCapacity
@@ -654,8 +637,6 @@
         private Button DeleteButton;
         private Button ClearFilterButton;
         private Button AcceptanceButton;
-        private Button QualityСontrolButton;
-        private Button RepackagingButton;
         private Button ShipmentButton;
         private Button InventoryButton;
     }

@@ -1,6 +1,4 @@
 ﻿namespace ArmSclad.Core.Exceptions
 {
-    public class EmailNotExistException : Exception
-    {
-    }
+    public class EmailNotExistException : Exception{}
 }

@@ -1,8 +1,6 @@
 ﻿using ArmSclad.Core.Entities;
-using ArmSclad.Domain.UseCases.Operations.Commands.AddOperation;
-using ArmSclad.UI.Common;
+using ArmSclad.Domain.Interfaces.Services;
 using ArmSclad.UI.Main.Modules.ProductsViews;
-using ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews.DataSourseModel;
 using MediatR;
 
 namespace ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews
@@ -10,20 +8,21 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews
     public partial class AcceptanceForm : Form
     {
         private static IMediator _mediator;
-        private int _storageId;
-        private List<ProductEntity> _selectedProducts = new List<ProductEntity>();
-        private List<SelectedProductModel> _selectedProductsModels = new List<SelectedProductModel>();
+        private static IRequestService _requestService;
+        private StorageEntity _selectedStorage;
+        private Dictionary<ProductEntity, float> _selectedProducts = new Dictionary<ProductEntity, float>();
 
-        public AcceptanceForm(IMediator mediator, int storageId)
+        public AcceptanceForm(IMediator mediator, IRequestService requestService, StorageEntity selectedStorage)
         {
             InitializeComponent();
 
             _mediator = mediator;
-            _storageId = storageId;
+            _selectedStorage = selectedStorage;
+            _requestService = requestService;
 
             CancelButton.Click += CloseButton_Click;
             checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
-            ProductsList.DataSource = _selectedProductsModels;
+
         }
 
         private void CheckBox1_CheckedChanged(object? sender, EventArgs e)
@@ -47,42 +46,54 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews
                 return;
             }
 
+            if (_selectedStorage.FreeCapacity < _selectedProducts.Sum(p => p.Key.SpaceOccupied * p.Value))
+            {
+                MessageBox.Show("Невозможно погрузить товары, не хватает места", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
             var result = MessageBox.Show("Вы уверены, что хотите отправить заявку на погрузку?", "", MessageBoxButtons.OKCancel);
 
             if (result == DialogResult.OK)
             {
 
+                _requestService.SendRequestAcceptance(_selectedProducts, _selectedStorage.Id);
+
                 bool isQualityСontrol = checkBox1.Checked;
                 bool isRepackaging = checkBox2.Checked;
 
-                TaskManager.AddTask(async () =>
+
+                if (isQualityСontrol)
                 {
-                    try
-                    {
-                        await _mediator.Send(new AddOperationCommand
-                        {
-                            Operation = new OperationEntity
-                            {
-                                CreatorId = Program.CurrentUser.Id,
-                                Products = _selectedProductsModels.Select(p => new ProductEntity { Id = int.Parse(p.ID), NumberPackagesOnStorage = p.Amount }).ToList(),
-                                Type = Core.Enums.OperationTypeEnum.Acceptance,
-                                StorageId = _storageId,
-                            }
-                        });
-                        MessageBox.Show("Заявка на погрузку успешно отправлена");
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Ошибка отправки заявки на погрузку", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                });
+                    _requestService.SendRequestQualityСontrol(_selectedProducts.Keys.ToList(), _selectedStorage.Id);
+                }
+
+                if (isRepackaging)
+                {
+                    _requestService.SendRequestRepacking(_selectedProducts.Keys.ToList(), _selectedStorage.Id);
+                }
             }
         }
+
+
 
         private void SelectProducts_Click(object sender, EventArgs e)
         {
             SelectProductsForm selectProductsForm = new SelectProductsForm(_mediator, ref _selectedProducts);
             selectProductsForm.ShowDialog();
+
+            ProductsList.Items.Clear();
+            foreach (var product in _selectedProducts)
+            {
+                ProductsList.Items.Add(new ListViewItem(new string[]
+                {
+                    product.Key.Id.ToString(),
+                    product.Key.Name,
+                    product.Value.ToString()
+                }));
+            }
+
         }
     }
 }

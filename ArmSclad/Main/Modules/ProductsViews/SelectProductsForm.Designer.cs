@@ -29,18 +29,20 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            SelectMode = new CheckBox();
             NextPageButton = new Button();
             UpdatePageButton = new Button();
             PrevPageButton = new Button();
             CloseButton = new Button();
             ProductsList = new ListView();
-            columnHeader1 = new ColumnHeader();
+            id = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             columnHeader9 = new ColumnHeader();
             columnHeader6 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
+            columnHeader1 = new ColumnHeader();
             panel2 = new Panel();
             Continue = new Button();
             panel3 = new Panel();
@@ -54,6 +56,7 @@
             // panel1
             // 
             panel1.BackColor = Color.White;
+            panel1.Controls.Add(SelectMode);
             panel1.Controls.Add(NextPageButton);
             panel1.Controls.Add(UpdatePageButton);
             panel1.Controls.Add(PrevPageButton);
@@ -63,6 +66,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(927, 47);
             panel1.TabIndex = 1;
+            // 
+            // SelectMode
+            // 
+            SelectMode.AutoSize = true;
+            SelectMode.Location = new Point(170, 13);
+            SelectMode.Name = "SelectMode";
+            SelectMode.Size = new Size(213, 24);
+            SelectMode.TabIndex = 7;
+            SelectMode.Text = "режим выбора продуктов";
+            SelectMode.UseVisualStyleBackColor = true;
             // 
             // NextPageButton
             // 
@@ -120,20 +133,22 @@
             // ProductsList
             // 
             ProductsList.BackColor = Color.White;
-            ProductsList.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader7, columnHeader3, columnHeader9, columnHeader6, columnHeader4 });
+            ProductsList.Columns.AddRange(new ColumnHeader[] { id, columnHeader2, columnHeader7, columnHeader3, columnHeader9, columnHeader6, columnHeader4, columnHeader1 });
             ProductsList.Dock = DockStyle.Fill;
             ProductsList.FullRowSelect = true;
             ProductsList.GridLines = true;
+            ProductsList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             ProductsList.Location = new Point(10, 57);
+            ProductsList.MultiSelect = false;
             ProductsList.Name = "ProductsList";
             ProductsList.Size = new Size(927, 420);
             ProductsList.TabIndex = 2;
             ProductsList.UseCompatibleStateImageBehavior = false;
             ProductsList.View = View.Details;
             // 
-            // columnHeader1
+            // id
             // 
-            columnHeader1.Text = "ID";
+            id.Text = "ID";
             // 
             // columnHeader2
             // 
@@ -143,7 +158,7 @@
             // columnHeader7
             // 
             columnHeader7.Text = "Описание";
-            columnHeader7.Width = 180;
+            columnHeader7.Width = 100;
             // 
             // columnHeader3
             // 
@@ -159,13 +174,17 @@
             // columnHeader6
             // 
             columnHeader6.DisplayIndex = 4;
-            columnHeader6.Text = "Стоимость за ед.";
+            columnHeader6.Text = "Кол-во уп. на складе";
             columnHeader6.Width = 130;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Стоимость за упаковку";
-            columnHeader4.Width = 150;
+            columnHeader4.Width = 120;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "Выбранное кол-во";
             // 
             // panel2
             // 
@@ -242,8 +261,10 @@
             Controls.Add(panel6);
             FormBorderStyle = FormBorderStyle.None;
             Name = "SelectProductsForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "SelectProductsForm";
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             panel2.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -256,7 +277,7 @@
         private Button PrevPageButton;
         private Button CloseButton;
         private ListView ProductsList;
-        private ColumnHeader columnHeader1;
+        private ColumnHeader id;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader7;
         private ColumnHeader columnHeader3;
@@ -269,5 +290,7 @@
         private Panel panel5;
         private Panel panel4;
         private Panel panel6;
+        private ColumnHeader columnHeader1;
+        private CheckBox SelectMode;
     }
 }

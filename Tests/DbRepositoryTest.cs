@@ -88,7 +88,7 @@ namespace Tests
             };
 
             var resultInsert = operationsRepository.Add(operation);
-            operation.Id = resultInsert;
+            operation.Id = resultInsert.Result;
 
             Assert.IsNotNull(resultInsert);
 
@@ -103,7 +103,7 @@ namespace Tests
             {
                 Address = "Test",
                 DeliveryTime = DateTime.Now,
-                ClientId = 10
+      
             };
 
             var resultInsert = ordersRepository.Add(order);
@@ -132,7 +132,7 @@ namespace Tests
             {
                 Description = "Test",
                 Name = "Test",
-                NumberPackagesOnStorage = 1,
+                NumberPackages = 1,
                 SpaceOccupied = 1,
                 NumberPiecesInPackage = 1,
                 Price = 1

@@ -18,7 +18,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 SecondName = e.SecondName,
                 LastName = e.LastName,
                 Id = e.Id,
-                Position = db.DbContext.EmployeePositions.Find(e.Position).Name,
+                Position = db.DbContext.EmployeePositions.First(ep => ep.Id == e.Position).Name,
                 Role = (EmployeeRoleEnum)e.Role
             }).Skip(from).Take(to).ToList();
         }

@@ -1,7 +1,7 @@
 ﻿using ArmSclad.Core.Entities;
 using ArmSclad.Core.Enums;
 using ArmSclad.Core.Exceptions;
-using ArmSclad.Domain.Interfaces.Services.AuthorizationService;
+using ArmSclad.Domain.Interfaces.Services;
 using ArmSclad.Domain.UseCases.Storages.Queries.GetStorages;
 using ArmSclad.UI.Main;
 using MediatR;
@@ -12,15 +12,13 @@ namespace ArmSclad.UI.Modules.Login.View
     {
         private static IAuthorizationService _authorizationService;
         private static List<StorageEntity> _storageEntities;
-        private static MainForm _mainForm;
 
-        public SignupForm(IAuthorizationService authorizationService, IMediator mediator, MainForm mainForm)
+        public SignupForm(IAuthorizationService authorizationService, IMediator mediator)
         {
             InitializeComponent();
 
             _authorizationService = authorizationService;
             _storageEntities = mediator.Send(new GetStoragesQuery()).Result;
-            _mainForm = mainForm;
 
             StoragesList.Items.AddRange(_storageEntities.Select(s => s.Name).ToArray());
             LoginButton.Click += LoginButton_Click;
@@ -57,12 +55,12 @@ namespace ArmSclad.UI.Modules.Login.View
                     Password = password,
                     Phone = phone,
                     Position = position,
-                    Role = role
+                    Role = role,
+                    StorageId = storage,
                 });
 
                 if (role == EmployeeRoleEnum.Worker || storage != -1)
                     employee.StorageId = _storageEntities[storage].Id;
-
 
                 MessageBox.Show("Регистрация прошла успешно");
 
@@ -71,9 +69,7 @@ namespace ArmSclad.UI.Modules.Login.View
                 Settings.Default.Save();
                 Program.CurrentUser = employee;
 
-
-                Application.OpenForms.OfType<LoginForm>().SingleOrDefault().Close();
-                _mainForm.Show();
+                Application.OpenForms.OfType<LoginForm>().SingleOrDefault().DialogResult = DialogResult.OK;
             }
             catch (EmailExistException)
             {

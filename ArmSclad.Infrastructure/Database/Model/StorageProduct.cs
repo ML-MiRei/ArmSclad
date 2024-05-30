@@ -4,6 +4,6 @@
     {
         public int StorageId { get; set; }
         public int ProductId { get; set; }
-        public float Amount { get; set; }
+        public double Amount { get; set; }
     }
 }

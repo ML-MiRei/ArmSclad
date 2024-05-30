@@ -33,17 +33,17 @@
             NextPageButton = new Button();
             UpdatePageButton = new Button();
             PrevPageButton = new Button();
-            ProductsList = new ListView();
-            columnHeader1 = new ColumnHeader();
-            columnHeader2 = new ColumnHeader();
-            columnHeader7 = new ColumnHeader();
-            columnHeader3 = new ColumnHeader();
-            columnHeader9 = new ColumnHeader();
-            columnHeader6 = new ColumnHeader();
-            columnHeader4 = new ColumnHeader();
             panel2 = new Panel();
             DeleteProduct = new Button();
             AddProduct = new Button();
+            ProductsList = new ListView();
+            columnHeader3 = new ColumnHeader();
+            columnHeader6 = new ColumnHeader();
+            columnHeader9 = new ColumnHeader();
+            columnHeader10 = new ColumnHeader();
+            columnHeader11 = new ColumnHeader();
+            columnHeader12 = new ColumnHeader();
+            columnHeader13 = new ColumnHeader();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -110,58 +110,6 @@
             PrevPageButton.UseVisualStyleBackColor = false;
             PrevPageButton.Click += PrevPageButton_Click;
             // 
-            // ProductsList
-            // 
-            ProductsList.BackColor = Color.White;
-            ProductsList.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader7, columnHeader3, columnHeader9, columnHeader6, columnHeader4 });
-            ProductsList.Dock = DockStyle.Fill;
-            ProductsList.FullRowSelect = true;
-            ProductsList.GridLines = true;
-            ProductsList.Location = new Point(0, 47);
-            ProductsList.MultiSelect = false;
-            ProductsList.Name = "ProductsList";
-            ProductsList.Scrollable = false;
-            ProductsList.Size = new Size(1139, 662);
-            ProductsList.TabIndex = 3;
-            ProductsList.UseCompatibleStateImageBehavior = false;
-            ProductsList.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            columnHeader1.Text = "ID";
-            // 
-            // columnHeader2
-            // 
-            columnHeader2.Text = "Название";
-            columnHeader2.Width = 120;
-            // 
-            // columnHeader7
-            // 
-            columnHeader7.Text = "Описание";
-            columnHeader7.Width = 200;
-            // 
-            // columnHeader3
-            // 
-            columnHeader3.Text = "Кол-во ед. в упаковке";
-            columnHeader3.Width = 170;
-            // 
-            // columnHeader9
-            // 
-            columnHeader9.DisplayIndex = 5;
-            columnHeader9.Text = "Занимаемое место упаковкой";
-            columnHeader9.Width = 180;
-            // 
-            // columnHeader6
-            // 
-            columnHeader6.DisplayIndex = 4;
-            columnHeader6.Text = "Стоимость за ед.";
-            columnHeader6.Width = 130;
-            // 
-            // columnHeader4
-            // 
-            columnHeader4.Text = "Стоимость за упаковку";
-            columnHeader4.Width = 200;
-            // 
             // panel2
             // 
             panel2.BackColor = Color.White;
@@ -203,16 +151,68 @@
             AddProduct.UseVisualStyleBackColor = false;
             AddProduct.Click += AddProduct_Click;
             // 
-            // ProductsForm
+            // ProductsList
+            // 
+            ProductsList.BackColor = Color.White;
+            ProductsList.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader6, columnHeader9, columnHeader10, columnHeader11, columnHeader12, columnHeader13 });
+            ProductsList.Dock = DockStyle.Fill;
+            ProductsList.FullRowSelect = true;
+            ProductsList.GridLines = true;
+            ProductsList.Location = new Point(0, 47);
+            ProductsList.MultiSelect = false;
+            ProductsList.Name = "ProductsList";
+            ProductsList.Scrollable = false;
+            ProductsList.Size = new Size(1139, 600);
+            ProductsList.TabIndex = 10;
+            ProductsList.UseCompatibleStateImageBehavior = false;
+            ProductsList.View = View.Details;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "ID";
+            // 
+            // columnHeader6
+            // 
+            columnHeader6.Text = "Название";
+            columnHeader6.Width = 120;
+            // 
+            // columnHeader9
+            // 
+            columnHeader9.Text = "Описание";
+            columnHeader9.Width = 200;
+            // 
+            // columnHeader10
+            // 
+            columnHeader10.Text = "Кол-во ед. в упаковке";
+            columnHeader10.Width = 170;
+            // 
+            // columnHeader11
+            // 
+            columnHeader11.DisplayIndex = 5;
+            columnHeader11.Text = "Занимаемое место упаковкой";
+            columnHeader11.Width = 180;
+            // 
+            // columnHeader12
+            // 
+            columnHeader12.DisplayIndex = 4;
+            columnHeader12.Text = "Стоимость за ед.";
+            columnHeader12.Width = 130;
+            // 
+            // columnHeader13
+            // 
+            columnHeader13.Text = "Стоимость за упаковку";
+            columnHeader13.Width = 200;
+            // 
+            // OperationsWithProductsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1139, 709);
-            Controls.Add(panel2);
             Controls.Add(ProductsList);
+            Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "ProductsForm";
+            Name = "OperationsWithProductsForm";
             Text = "ProductsForm";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -226,17 +226,17 @@
         private Button NextPageButton;
         private Button UpdatePageButton;
         private Button PrevPageButton;
-        private ListView ProductsList;
-        private ColumnHeader columnHeader1;
-        private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader7;
-        private ColumnHeader columnHeader3;
-        private ColumnHeader columnHeader9;
-        private ColumnHeader columnHeader6;
-        private ColumnHeader columnHeader4;
         private Panel panel2;
         private Button AddProduct;
         private Button DeleteProduct;
         private CheckBox UpdateMode;
+        private ListView ProductsList;
+        private ColumnHeader columnHeader3;
+        private ColumnHeader columnHeader6;
+        private ColumnHeader columnHeader9;
+        private ColumnHeader columnHeader10;
+        private ColumnHeader columnHeader11;
+        private ColumnHeader columnHeader12;
+        private ColumnHeader columnHeader13;
     }
 }

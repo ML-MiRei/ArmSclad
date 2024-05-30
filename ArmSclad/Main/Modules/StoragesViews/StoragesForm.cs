@@ -1,11 +1,12 @@
 ﻿using ArmSclad.Core.Entities;
 using ArmSclad.Domain.FiltersModels;
-using ArmSclad.Domain.UseCases.Operations.Commands.AddOperation;
+using ArmSclad.Domain.Interfaces.Services;
 using ArmSclad.Domain.UseCases.Storages.Commands.AddStorage;
 using ArmSclad.Domain.UseCases.Storages.Commands.DeleteStorage;
 using ArmSclad.Domain.UseCases.Storages.Commands.UpdateStorage;
 using ArmSclad.Domain.UseCases.Storages.Queries.GetStorages;
 using ArmSclad.UI.Common;
+using ArmSclad.UI.Main.Modules.OperationsViews;
 using ArmSclad.UI.Main.Modules.ProductsViews;
 using ArmSclad.UI.Main.Modules.StoragesViews.OperationsViews;
 using MediatR;
@@ -15,19 +16,21 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews
     public partial class StoragesForm : Form
     {
         private static IMediator _mediator;
+        private static IRequestService _requestService;
         private static int _pageNumber = 0;
         private static int _amountStoragesOnPage = 14;
         private static List<StorageEntity> _storages;
         private static FilterStorages _filter = null;
 
 
-        public StoragesForm(IMediator mediator)
+        public StoragesForm(IMediator mediator, IRequestService requestService)
         {
             InitializeComponent();
 
             TopLevel = false;
 
             _mediator = mediator;
+            _requestService = requestService;
 
             StoragesList.SelectedIndexChanged += StoragesList_SelectedIndexChanged;
             PrevPageButton.Click += PreviousPage;
@@ -234,40 +237,27 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews
             var result = MessageBox.Show("Отправить заявку на проведение инвентаризации?", "Операция", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                TaskManager.AddTask(async () =>
-                {
-                    try
-                    {
-                        await _mediator.Send(new AddOperationCommand
-                        {
-                            Operation = new OperationEntity
-                            {
-                                CreatorId = Program.CurrentUser.Id,
-                                StorageId = selectedStorageId,
-                                Type = Core.Enums.OperationTypeEnum.Inventory
-                            }
-                        });
-                        MessageBox.Show("Заявка на инвентаризацию отправлена");
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Ошибка отправки заявки на инвентаризацию");
-                    }
-
-                });
+                _requestService.SendRequestInventory(selectedStorageId);
             }
         }
 
         private void AcceptanceButton_Click(object sender, EventArgs e)
         {
-            AcceptanceForm acceptanceForm = new AcceptanceForm(_mediator, _storages[StoragesList.SelectedItems[0].Index].Id);
+            AcceptanceForm acceptanceForm = new AcceptanceForm(_mediator, _requestService, _storages[StoragesList.SelectedItems[0].Index]);
             acceptanceForm.ShowDialog();
         }
 
         private void ShipmentButton_Click(object sender, EventArgs e)
         {
-            ShipmentForm shipmentForm = new ShipmentForm(_mediator, _storages[StoragesList.SelectedItems[0].Index].Id);
+            ShipmentForm shipmentForm = new ShipmentForm(_mediator, _requestService, _storages[StoragesList.SelectedItems[0].Index].Id);
             shipmentForm.ShowDialog();
         }
+
+        private void MovingButton_Click(object sender, EventArgs e)
+        {
+            MoovingForm moovingForm = new MoovingForm(_mediator, _requestService, _storages[StoragesList.SelectedItems[0].Index].Id);
+            moovingForm.ShowDialog();
+        }
+
     }
 }

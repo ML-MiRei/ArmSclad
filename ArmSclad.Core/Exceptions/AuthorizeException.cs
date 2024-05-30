@@ -1,6 +1,4 @@
 ﻿namespace ArmSclad.Core.Exceptions
 {
-    public class AuthorizeException : Exception
-    {
-    }
+    public class AuthorizeException : Exception{}
 }

@@ -48,7 +48,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 SpaceOccupied = p.SpaceOccupied,
                 Id = p.Id,
                 Price = p.Price,
-                NumberPiecesInPackage = p.NumberPiecesInPackage
+                NumberPiecesInPackage = p.NumberPiecesInPackage,
             }).Skip(from).Take(to).ToList();
         }
 
@@ -65,7 +65,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                     SpaceOccupied = p.SpaceOccupied,
                     Id = p.Id,
                     Price = p.Price,
-                    NumberPiecesInPackage = p.NumberPiecesInPackage
+                    NumberPiecesInPackage = p.NumberPiecesInPackage,
+                    NumberPackages = db.DbContext.OrdersProducts.First(op => op.OrderId == orderId && op.ProductId == p.Id).Amount
                 }).Skip(from).Take(to).ToList();
         }
 
@@ -82,7 +83,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                    SpaceOccupied = p.SpaceOccupied,
                    Id = p.Id,
                    Price = p.Price,
-                   NumberPiecesInPackage = p.NumberPiecesInPackage
+                   NumberPiecesInPackage = p.NumberPiecesInPackage,
+                   NumberPackages = db.DbContext.StoragesProducts.First(sp => sp.StorageId == storageId && sp.ProductId == p.Id).Amount
                }).Skip(from).Take(to).ToList();
         }
 

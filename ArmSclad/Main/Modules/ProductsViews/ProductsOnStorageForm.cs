@@ -58,7 +58,7 @@ namespace ArmSclad.UI.Main.Modules.ProductsViews
                     product.Id + "",
                     product.Name,
                     product.Description,
-                    product.NumberPackagesOnStorage + "",
+                    product.NumberPackages + "",
                     product.AllPrice + "",
                     product.AllSpaceOccupied + ""
                 }));

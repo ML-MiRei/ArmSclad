@@ -1,20 +1,17 @@
-﻿using ArmSclad.Domain.Interfaces.Services.AuthorizationService;
-using ArmSclad.Core.Exceptions;
-using ArmSclad.UI.Main;
+﻿using ArmSclad.Core.Exceptions;
+using ArmSclad.Domain.Interfaces.Services;
 
 namespace ArmSclad.UI.Modules.Login.View
 {
     public partial class SigninForm : Form
     {
         private static IAuthorizationService _authorizationService;
-        private static MainForm _mainForm;
 
-        public SigninForm(IAuthorizationService authorizationService, MainForm mainForm)
+        public SigninForm(IAuthorizationService authorizationService)
         {
             InitializeComponent();
 
             _authorizationService = authorizationService;
-            _mainForm = mainForm;
 
             LoginButton.Click += LoginButton_Click;
         }
@@ -40,8 +37,7 @@ namespace ArmSclad.UI.Modules.Login.View
 
                 MessageBox.Show("Авторизация прошла успешно");
 
-                Application.OpenForms.OfType<LoginForm>().SingleOrDefault().Close();
-                _mainForm.Show();
+                Application.OpenForms.OfType<LoginForm>().SingleOrDefault().DialogResult = DialogResult.OK;
             }
             catch (EmailNotExistException)
             {

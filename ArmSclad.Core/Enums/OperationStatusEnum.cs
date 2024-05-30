@@ -1,5 +1,6 @@
 ﻿namespace ArmSclad.Core.Enums
 {
+
     public enum OperationStatusEnum
     {
         Сancelled = 0,
