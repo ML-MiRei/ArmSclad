@@ -1,14 +1,14 @@
-﻿using ArmSclad.Domain.Interfaces.Repository;
-using ArmSclad.Core.Entities;
+﻿using ArmSclad.Core.Entities;
 using ArmSclad.Core.Exceptions;
+using ArmSclad.Domain.Interfaces.Repository;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Database.Model;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
-    public class StoragesRepository(DatabaseSingleton db) : IStoragesRepository
+    public class StoragesRepository(MyDbContext db) : IStoragesRepository
     {
-        public int Add(StorageEntity storageEntity)
+        public Task<int> Add(StorageEntity storageEntity)
         {
             Storage storage = new Storage
             {
@@ -19,19 +19,19 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 OpeningTime = storageEntity.OpeningTime
             };
 
-            db.DbContext.Storages.Add(storage);
-            db.DbContext.SaveChanges();
-            return storage.Id;
+            db.Storages.Add(storage);
+            db.SaveChanges();
+            return Task.FromResult(storage.Id);
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
-            Storage storage = db.DbContext.Storages.Find(id);
+            Storage storage = db.Storages.Find(id);
             if (storage != null)
             {
-                db.DbContext.Storages.Remove(storage);
-                db.DbContext.SaveChanges();
-                return;
+                db.Storages.Remove(storage);
+                db.SaveChanges();
+                return Task.CompletedTask; 
             }
             throw new NotFoundException();
 
@@ -40,7 +40,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
         public List<StorageEntity> Get(int from = 0, int to = 10)
         {
 
-            return db.DbContext.Storages.Where(s => s.IsActive).OrderBy(s => s.Name).Select(s => new StorageEntity
+            return db.Storages.Where(s => s.IsActive).OrderBy(s => s.Name).Select(s => new StorageEntity
             {
                 Address = s.Address,
                 Capacity = s.Capacity,
@@ -48,9 +48,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 OpeningTime = s.OpeningTime,
                 Id = s.Id,
                 Name = s.Name,
-                Products = db.DbContext.StoragesProducts
+                Products = db.StoragesProducts
                 .Where(sp => sp.StorageId == s.Id)
-                .Join(db.DbContext.Products, sp => sp.ProductId, p => p.Id, (sp, p) =>
+                .Join(db.Products, sp => sp.ProductId, p => p.Id, (sp, p) =>
                     new ProductEntity
                     {
                         Price = p.Price,
@@ -70,7 +70,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
         public List<StorageEntity> Get(Domain.FiltersModels.FilterStorages filterStorages, int from, int to)
         {
 
-            var storages = db.DbContext.Storages.Where(s => s.IsActive);
+            var storages = db.Storages.Where(s => s.IsActive);
 
             if (filterStorages.SearchName != null)
                 storages = storages.Where(s => s.Name.Contains(filterStorages.SearchName));
@@ -97,9 +97,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         }
 
-        public void Update(StorageEntity storageEntity)
+        public Task Update(StorageEntity storageEntity)
         {
-            Storage storage = db.DbContext.Storages.Find(storageEntity.Id);
+            Storage storage = db.Storages.Find(storageEntity.Id);
             if (storage != null)
             {
                 storage.Address = storageEntity.Address;
@@ -108,9 +108,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 storage.Name = storageEntity.Name;
                 storage.OpeningTime = storageEntity.OpeningTime;
 
-                db.DbContext.Storages.Update(storage);
-                db.DbContext.SaveChanges();
-                return;
+                db.Storages.Update(storage);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
             throw new NotFoundException();
         }

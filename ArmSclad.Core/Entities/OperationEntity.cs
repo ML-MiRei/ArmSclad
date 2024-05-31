@@ -19,9 +19,6 @@ namespace ArmSclad.Core.Entities
         {
             get
             {
-                if (Status == OperationStatusEnum.Сancelled)
-                    return "заявка";
-
                 switch (Type)
                 {
                     case OperationTypeEnum.Moving:

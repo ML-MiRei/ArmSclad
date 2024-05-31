@@ -7,7 +7,7 @@ using ArmSclad.Infrastructure.Database.Model;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
-    public class OperationsRepository(DatabaseSingleton db) : IOperationsRepository
+    public class OperationsRepository(MyDbContext db) : IOperationsRepository
     {
         public Task<int> Add(OperationEntity operationEntity)
         {
@@ -27,16 +27,17 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             if (!(new OperationTypeEnum[] { OperationTypeEnum.Inventory, OperationTypeEnum.Repackaging, OperationTypeEnum.QualityСontrol }.Contains(operationEntity.Type)) &&
                 (OperationStatusEnum)operation.Status == OperationStatusEnum.Waiting)
             {
-                operation.Id = db.DbContext.Operations.Max(o => o.Id) + 1;
-                db.DbContext.OperationsProducts.AddRange(operationEntity.Products.Select(p => new OperationProduct
+                operation.Id = db.Operations.Max(o => o.Id) + 1;
+                db.OperationsProducts.AddRange(operationEntity.Products.Select(p => new OperationProduct
                 {
                     Amount = p.NumberPackages.Value,
                     OperationId = operation.Id,
                     ProductId = p.Id
                 }));
-                db.DbContext.SaveChanges();
+                db.SaveChanges();
             }
-            else if ((OperationStatusEnum)operation.Status == OperationStatusEnum.Сancelled)
+
+            if ((OperationStatusEnum)operation.Status == OperationStatusEnum.Сancelled)
             {
                 CancelActionsWithProducts(operationEntity);
             }
@@ -45,8 +46,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 ActionsWithProducts(operationEntity);
             }
 
-            db.DbContext.Operations.Add(operation);
-            db.DbContext.SaveChanges();
+            db.Operations.Add(operation);
+            db.SaveChanges();
 
             return Task.FromResult(operation.Id);
         }
@@ -57,14 +58,14 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             switch (operationEntity.Type)
             {
                 case OperationTypeEnum.Moving:
-                    AddProductsOnStorage(operationEntity);
-                    DeleteProductsFromStorage(operationEntity);
+                    AddProductsOnStorage(operationEntity, operationEntity.StorageId);
+                    DeleteProductsFromStorage(operationEntity, operationEntity.TargetId.Value);
                     break;
                 case OperationTypeEnum.Acceptance:
-                    DeleteProductsFromStorage(operationEntity);
+                    DeleteProductsFromStorage(operationEntity, operationEntity.StorageId);
                     break;
                 case OperationTypeEnum.Shipment:
-                    AddProductsOnStorage(operationEntity);
+                    AddProductsOnStorage(operationEntity, operationEntity.StorageId);
                     break;
             }
         }
@@ -74,54 +75,54 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             switch (operationEntity.Type)
             {
                 case OperationTypeEnum.Moving:
-                    DeleteProductsFromStorage(operationEntity);
-                    AddProductsOnStorage(operationEntity);
+                    DeleteProductsFromStorage(operationEntity, operationEntity.StorageId);
+                    AddProductsOnStorage(operationEntity, operationEntity.TargetId.Value);
                     break;
                 case OperationTypeEnum.Acceptance:
-                    AddProductsOnStorage(operationEntity);
+                    AddProductsOnStorage(operationEntity, operationEntity.StorageId);
                     break;
                 case OperationTypeEnum.Shipment:
-                    DeleteProductsFromStorage(operationEntity);
+                    DeleteProductsFromStorage(operationEntity, operationEntity.StorageId);
                     break;
             }
         }
 
 
-        private void DeleteProductsFromStorage(OperationEntity operation)
+        private void DeleteProductsFromStorage(OperationEntity operation, int storageId)
         {
             foreach (var product in operation.Products)
             {
-                var stp = db.DbContext.StoragesProducts.First(sp => sp.ProductId == product.Id && sp.StorageId == operation.StorageId);
+                var stp = db.StoragesProducts.First(sp => sp.ProductId == product.Id && sp.StorageId == storageId);
                 stp.Amount -= product.NumberPackages.Value;
-                db.DbContext.StoragesProducts.Update(stp);
+                db.StoragesProducts.Update(stp);
             }
-            db.DbContext.SaveChanges();
+            db.SaveChanges();
         }
 
-        private void AddProductsOnStorage(OperationEntity operation)
+        private void AddProductsOnStorage(OperationEntity operation, int storageId)
         {
             foreach (var product in operation.Products)
             {
-                var stp = db.DbContext.StoragesProducts.FirstOrDefault(sp => sp.ProductId == product.Id && sp.StorageId == operation.StorageId);
+                var stp = db.StoragesProducts.FirstOrDefault(sp => sp.ProductId == product.Id && sp.StorageId == storageId);
 
                 // если данного продукта не было на складе добавляем новую запись, иначе - обновляем информацию о количестве
                 if (stp == default)
                 {
-                    db.DbContext.StoragesProducts.Add(new StorageProduct
+                    db.StoragesProducts.Add(new StorageProduct
                     {
                         Amount = product.NumberPackages.Value,
                         ProductId = product.Id,
-                        StorageId = operation.StorageId
+                        StorageId = storageId
                     });
                 }
                 else
                 {
-                    stp.Amount -= product.NumberPackages.Value;
-                    db.DbContext.StoragesProducts.Update(stp);
+                    stp.Amount += product.NumberPackages.Value;
+                    db.StoragesProducts.Update(stp);
                 }
 
             }
-            db.DbContext.SaveChanges();
+            db.SaveChanges();
 
         }
 
@@ -130,21 +131,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         public List<OperationEntity> Get(int from = 0, int to = 10)
         {
-            return db.DbContext.Operations.Select(o => new OperationEntity
-            {
-                Id = o.Id,
-                Status = (OperationStatusEnum)o.Status,
-                TargetId = o.TargetId,
-                Type = (OperationTypeEnum)o.Type,
-                StorageId = o.StorageId,
-                CreatorId = o.CreatorId,
-                EmployeeId = o.EmployeeId
-            }).Skip(from).Take(to).ToList();
-        }
-
-        public List<OperationEntity> GetByStorage(int storageId, int from = 0, int to = 10)
-        {
-            return db.DbContext.Operations.Where(o => o.StorageId == storageId).Select(o => new OperationEntity
+            return db.Operations.Select(o => new OperationEntity
             {
                 Id = o.Id,
                 Status = (OperationStatusEnum)o.Status,
@@ -153,8 +140,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 StorageId = o.StorageId,
                 CreatorId = o.CreatorId,
                 EmployeeId = o.EmployeeId,
-                Products = db.DbContext.Products.Join(
-                    db.DbContext.OperationsProducts.Where(op => op.OperationId == o.Id),
+                Products = db.Products.Join(
+                    db.OperationsProducts.Where(op => op.OperationId == o.Id),
                     p => p.Id,
                     op => op.ProductId,
                     (p, op) => new ProductEntity
@@ -165,7 +152,36 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                         Description = p.Description,
                         Name = p.Name,
                         NumberPiecesInPackage = p.NumberPiecesInPackage,
-                        NumberPackages = db.DbContext.OperationsProducts.First(op => op.ProductId == p.Id && op.OperationId == o.Id).Amount
+                        NumberPackages = db.OperationsProducts.First(op => op.ProductId == p.Id && op.OperationId == o.Id).Amount
+                    }
+                    ).ToList()
+            }).Skip(from).Take(to).ToList();
+        }
+
+        public List<OperationEntity> GetByStorage(int storageId, int from = 0, int to = 10)
+        {
+            return db.Operations.Where(o => o.StorageId == storageId).Select(o => new OperationEntity
+            {
+                Id = o.Id,
+                Status = (OperationStatusEnum)o.Status,
+                TargetId = o.TargetId,
+                Type = (OperationTypeEnum)o.Type,
+                StorageId = o.StorageId,
+                CreatorId = o.CreatorId,
+                EmployeeId = o.EmployeeId,
+                Products = db.Products.Join(
+                    db.OperationsProducts.Where(op => op.OperationId == o.Id),
+                    p => p.Id,
+                    op => op.ProductId,
+                    (p, op) => new ProductEntity
+                    {
+                        Id = p.Id,
+                        Price = p.Price,
+                        SpaceOccupied = p.SpaceOccupied,
+                        Description = p.Description,
+                        Name = p.Name,
+                        NumberPiecesInPackage = p.NumberPiecesInPackage,
+                        NumberPackages = db.OperationsProducts.First(op => op.ProductId == p.Id && op.OperationId == o.Id).Amount
                     }
                     ).ToList()
             }).Skip(from).Take(to).ToList();
@@ -173,9 +189,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         public List<OperationWithProductEntity> GetByProduct(int productId, int from = 0, int to = 10)
         {
-            return db.DbContext.Operations
+            return db.Operations
                 .Join(
-                db.DbContext.OperationsProducts.Where(p => p.ProductId == productId),
+                db.OperationsProducts.Where(p => p.ProductId == productId),
                 o => o.Id,
                 p => p.OperationId,
                 (o, p) =>
@@ -184,8 +200,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                      Id = p.ProductId,
                      Amount = p.Amount,
                      OperationType = (OperationTypeEnum)o.Type,
-                     Description = db.DbContext.Products.First(pr => pr.Id == p.ProductId).Description,
-                     Name = db.DbContext.Products.First(pr => pr.Id == p.ProductId).Name,
+                     Description = db.Products.First(pr => pr.Id == p.ProductId).Description,
+                     Name = db.Products.First(pr => pr.Id == p.ProductId).Name,
                      TargetId = o.TargetId
                  }).Skip(from).Take(to).ToList();
         }

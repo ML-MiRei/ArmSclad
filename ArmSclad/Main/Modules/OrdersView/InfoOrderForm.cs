@@ -31,7 +31,7 @@ namespace ArmSclad.UI.Main.Modules.OrdersView
 
 
             AddressTextBox.Text = orderEntity.Address;
-            if (orderEntity.Client.FirstName != null)
+            if (orderEntity.Client?.FirstName != null)
             {
                 NameClient.Text = orderEntity.Client.ShortFullName;
             }
@@ -52,7 +52,7 @@ namespace ArmSclad.UI.Main.Modules.OrdersView
         {
             if (InputValidate.CheckNotEmpty(AddressTextBox))
             {
-                _orderEntity.Products = _selectedProducts.Keys.ToList();
+                _orderEntity.Products = _selectedProducts.Select(p => new ProductEntity { Id = p.Key.Id, NumberPackages = p.Value }).ToList();
                 _orderEntity.Client = _selectedClient;
                 _orderEntity.Address = AddressTextBox.Text;
                 _orderEntity.DeliveryTime = DeliveryDatePicker.Value;

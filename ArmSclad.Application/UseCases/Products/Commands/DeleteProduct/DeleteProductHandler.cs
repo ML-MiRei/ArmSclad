@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Products.Commands.DeleteProduct
     {
         public Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => productsRepository.Delete(request.ProductId));
+            return productsRepository.Delete(request.ProductId);
         }
     }
 }

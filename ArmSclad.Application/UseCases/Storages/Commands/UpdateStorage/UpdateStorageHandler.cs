@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Storages.Commands.UpdateStorage
     {
         public Task Handle(UpdateStorageCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => storagesRepository.Update(request.Storage));
+            return storagesRepository.Update(request.Storage);
         }
     }
 }

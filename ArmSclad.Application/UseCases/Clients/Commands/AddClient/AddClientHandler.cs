@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Clients.Commands.AddClient
     {
         public Task<int> Handle(AddClientCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => clientsRepository.Add(request.ClientEntity));
+            return clientsRepository.Add(request.ClientEntity);
         }
     }
 }

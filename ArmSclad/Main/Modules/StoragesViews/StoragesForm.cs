@@ -142,7 +142,7 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews
 
         private void ShowEmployees_Click(object? sender, EventArgs e)
         {
-            EmployeesForm usersForm = new EmployeesForm(_mediator, StoragesList.Items.IndexOf(StoragesList.SelectedItems[0]));
+            EmployeesForm usersForm = new EmployeesForm(_mediator, _storages[StoragesList.SelectedItems[0].Index].Id);
             usersForm.ShowDialog();
         }
 
@@ -196,8 +196,11 @@ namespace ArmSclad.UI.Main.Modules.StoragesViews
         {
             if (_pageNumber > 0)
             {
-                _pageNumber--;
-                LoadData();
+                if (_pageNumber > 0)
+                {
+                    _pageNumber--;
+                    LoadData();
+                }
             }
         }
 

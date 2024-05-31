@@ -7,12 +7,12 @@ using ArmSclad.Domain.Interfaces.Services;
 
 namespace ArmSclad.Infrastructure.Implementations.Services
 {
-    public class AuthorizationService(DatabaseSingleton db) : IAuthorizationService
+    public class AuthorizationService(MyDbContext db) : IAuthorizationService
     {
         public EmployeeEntity Authorize(string email, string password)
         {
-            var t = db.DbContext.Employees.Count();
-            var employee = db.DbContext.Employees.FirstOrDefault(emp => emp.IsActive && emp.Email == email);
+            var t = db.Employees.Count();
+            var employee = db.Employees.FirstOrDefault(emp => emp.IsActive && emp.Email == email);
             if (employee == null)
                 throw new EmailNotExistException();
             if (employee.Password != password)
@@ -26,7 +26,7 @@ namespace ArmSclad.Infrastructure.Implementations.Services
                 Password = password,
                 Phone = employee.Phone,
                 Id = employee.Id,
-                Position = db.DbContext.EmployeePositions.Find(employee.Position).Name,
+                Position = db.EmployeePositions.Find(employee.Position).Name,
                 Role = (EmployeeRoleEnum)employee.Role,
                 StorageId = employee.StorageId
             };
@@ -35,16 +35,16 @@ namespace ArmSclad.Infrastructure.Implementations.Services
 
         public void DeleteAccount(int id)
         {
-            Employee employee = db.DbContext.Employees.Find(id);
+            Employee employee = db.Employees.Find(id);
             if (employee == null)
                 throw new NotFoundException();
-            db.DbContext.Employees.Remove(employee);
-            db.DbContext.SaveChanges();
+            db.Employees.Remove(employee);
+            db.SaveChanges();
         }
 
         public EmployeeEntity Registrate(EmployeeEntity employeeEntity)
         {
-            var isEmployee = db.DbContext.Employees.FirstOrDefault(emp => emp.Email == employeeEntity.Email);
+            var isEmployee = db.Employees.FirstOrDefault(emp => emp.Email == employeeEntity.Email);
 
             if (isEmployee != null)
                 throw new EmailExistException();
@@ -61,17 +61,17 @@ namespace ArmSclad.Infrastructure.Implementations.Services
                 StorageId = employeeEntity.StorageId
             };
 
-            EmployeePosition employeePosition = db.DbContext.EmployeePositions.FirstOrDefault(ep => ep.Name == employeeEntity.Position);
+            EmployeePosition employeePosition = db.EmployeePositions.FirstOrDefault(ep => ep.Name == employeeEntity.Position);
             if (employeePosition == null)
             {
                 employeePosition = new EmployeePosition { Name = employeeEntity.Position };
-                db.DbContext.EmployeePositions.Add(employeePosition);
-                db.DbContext.SaveChanges();
+                db.EmployeePositions.Add(employeePosition);
+                db.SaveChanges();
             }
 
             employee.Position = employeePosition.Id;
-            db.DbContext.Employees.Add(employee);
-            db.DbContext.SaveChanges();
+            db.Employees.Add(employee);
+            db.SaveChanges();
 
             employeeEntity.Id = employee.Id;
             return employeeEntity;

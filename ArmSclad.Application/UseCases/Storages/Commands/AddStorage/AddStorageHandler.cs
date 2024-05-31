@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Storages.Commands.AddStorage
     {
         public Task<int> Handle(AddStorageCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => storagesRepository.Add(request.Storage));
+            return storagesRepository.Add(request.Storage);
         }
     }
 }

@@ -6,9 +6,9 @@ using ArmSclad.Infrastructure.Database.Model;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
-    public class OrdersRepository(DatabaseSingleton db) : IOrdersRepository
+    public class OrdersRepository(MyDbContext db) : IOrdersRepository
     {
-        public int Add(OrderEntity orderEntity)
+        public Task<int> Add(OrderEntity orderEntity)
         {
             Order order = new Order()
             {
@@ -16,49 +16,49 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 DeliveryTime = orderEntity.DeliveryTime,
                 ClientId = orderEntity.Client.Id
             };
-            db.DbContext.Add(order);
-            db.DbContext.SaveChanges();
+            db.Add(order);
+            db.SaveChanges();
 
             foreach (var product in orderEntity.Products)
             {
-                db.DbContext.OrdersProducts.Add(new OrderProduct
+                db.OrdersProducts.Add(new OrderProduct
                 {
                     Amount = product.NumberPackages.Value,
                     OrderId = order.Id,
                     ProductId = product.Id
                 });
             }
-            db.DbContext.SaveChanges();
+            db.SaveChanges();
 
-            return order.Id;
+            return Task.FromResult(order.Id);
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
-            Order order = db.DbContext.Orders.Find(id);
+            Order order = db.Orders.Find(id);
             if (order != null)
             {
-                db.DbContext.Remove(order);
-                db.DbContext.SaveChanges();
-                return;
+                db.Remove(order);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
             throw new NotFoundException();
         }
 
         public List<OrderEntity> Get(int from = 0, int to = 10)
         {
-            return db.DbContext.Orders.Where(o => o.IsActive).Select(or => new OrderEntity()
+            return db.Orders.Where(o => o.IsActive).Select(or => new OrderEntity()
             {
                 DeliveryTime = or.DeliveryTime,
                 Address = or.Address,
                 Client = new ClientEntity
                 {
-                    Id = db.DbContext.Clients.First(c => c.Id == or.ClientId).Id,
+                    Id = db.Clients.First(c => c.Id == or.ClientId).Id,
                 },
                 Id = or.Id,
-                Products = db.DbContext.OrdersProducts
+                Products = db.OrdersProducts
                 .Where(op => op.OrderId == or.Id)
-                .Join(db.DbContext.Products, op => op.ProductId, p => p.Id, (op, p) => new ProductEntity
+                .Join(db.Products, op => op.ProductId, p => p.Id, (op, p) => new ProductEntity
                 {
                     Price = p.Price,
                     NumberPackages = op.Amount,
@@ -72,19 +72,19 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
 
 
-        public void Update(OrderEntity orderEntity)
+        public Task Update(OrderEntity orderEntity)
         {
 
-            Order order = db.DbContext.Orders.Find(orderEntity.Id);
+            Order order = db.Orders.Find(orderEntity.Id);
             if (order != null)
             {
                 order.Address = orderEntity.Address;
                 order.DeliveryTime = orderEntity.DeliveryTime;
                 order.ClientId = orderEntity.Client.Id;
 
-                db.DbContext.Update(order);
-                db.DbContext.SaveChanges();
-                return;
+                db.Update(order);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
             throw new NotFoundException();
         }

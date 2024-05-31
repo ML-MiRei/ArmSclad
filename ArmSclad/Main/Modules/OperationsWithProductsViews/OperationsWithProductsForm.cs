@@ -56,8 +56,11 @@ namespace ArmSclad.UI.Main.Modules.OperationsWithProductsViews
 
         private void PrevPageButton_Click(object sender, EventArgs e)
         {
-            _pageNumber--;
-            LoadData();
+            if (_pageNumber > 0)
+            {
+                _pageNumber--;
+                LoadData();
+            }
         }
 
         private void UpdatePageButton_Click(object sender, EventArgs e)

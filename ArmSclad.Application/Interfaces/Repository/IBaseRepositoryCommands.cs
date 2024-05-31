@@ -4,8 +4,8 @@ namespace ArmSclad.Domain.Interfaces.Repository
 {
     public interface IBaseRepositoryCommands<T> where T : BaseEntity
     {
-        public void Update(T t);
-        public void Delete(int id);
-        public int Add(T t);
+        public Task Update(T t);
+        public Task Delete(int id);
+        public Task<int> Add(T t);
     }
 }

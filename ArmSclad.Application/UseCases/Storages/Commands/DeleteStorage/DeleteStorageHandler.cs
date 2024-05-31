@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Storages.Commands.DeleteStorage
     {
         public Task Handle(DeleteStorageCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => storagesRepository.Delete(request.StorageId));
+            return storagesRepository.Delete(request.StorageId);
         }
     }
 }

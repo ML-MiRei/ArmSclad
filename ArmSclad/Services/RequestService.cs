@@ -176,8 +176,10 @@ namespace ArmSclad.UI.Services
                             Status = OperationStatusEnum.Сancelled,
                             StorageId = operation.StorageId,
                             EmployeeId = operation.EmployeeId,
-                            TargetId = operation.Id,
+                            TargetId = operation.TargetId,
                             Type = operation.Type,
+                            Id = operation.Id,
+                            Products = operation.Products
                         }
                     });
 

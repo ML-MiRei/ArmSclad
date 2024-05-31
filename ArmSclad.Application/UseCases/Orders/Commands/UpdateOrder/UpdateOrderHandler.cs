@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Orders.Commands.UpdateOrder
     {
         public Task Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => ordersRepository.Update(request.Order));
+            return ordersRepository.Update(request.Order);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Products.Commands.UpdateProduct
     {
         public Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => productsRepository.Update(request.Product));
+            return productsRepository.Update(request.Product);
         }
     }
 }

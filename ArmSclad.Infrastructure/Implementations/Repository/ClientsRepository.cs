@@ -5,9 +5,9 @@ using ArmSclad.Infrastructure.Database.Context;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
-    public class ClientsRepository(DatabaseSingleton db) : IClientsRepository
+    public class ClientsRepository(MyDbContext db) : IClientsRepository
     {
-        public int Add(ClientEntity clientEntity)
+        public Task<int> Add(ClientEntity clientEntity)
         {
             var client = new Database.Model.Client
             {
@@ -21,20 +21,20 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 IsActive = true
             };
 
-             db.DbContext.Clients.Add(client);
-             db.DbContext.SaveChanges();
+            db.Clients.Add(client);
+            db.SaveChanges();
 
-            return client.Id;
+            return Task.FromResult(client.Id);
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
-            var client = db.DbContext.Clients.Find(id);
+            var client = db.Clients.Find(id);
             if (client != null)
             {
-                db.DbContext.Clients.Remove(client);
-                db.DbContext.SaveChanges();
-                return;
+                db.Clients.Remove(client);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
             throw new NotFoundException();
 
@@ -42,7 +42,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         public List<ClientEntity> Get(int from = 0, int to = 10)
         {
-            return db.DbContext.Clients.Where(c => c.IsActive).Select(c => new ClientEntity
+            return db.Clients.Where(c => c.IsActive).Select(c => new ClientEntity
             {
                 Id = c.Id,
                 FirstName = c.FirstName,
@@ -55,9 +55,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
             }).Skip(from).Take(to).ToList();
         }
 
-        public void Update(ClientEntity clientEntity)
+        public Task Update(ClientEntity clientEntity)
         {
-            var client = db.DbContext.Clients.Find(clientEntity.Id);
+            var client = db.Clients.Find(clientEntity.Id);
             if (client != null)
             {
 
@@ -69,9 +69,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 client.LastName = clientEntity.LastName;
                 client.Status = (int)clientEntity.Status;
 
-                db.DbContext.Clients.Update(client);
-                db.DbContext.SaveChanges();
-                return;
+                db.Clients.Update(client);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
             throw new NotFoundException();
 

@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Clients.Commands.DeleteClient
     {
         public Task Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => clientsRepository.Delete(request.ClientId));
+            return clientsRepository.Delete(request.ClientId);
         }
     }
 }

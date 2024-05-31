@@ -12,7 +12,7 @@ namespace ArmSclad.Infrastructure
         //добавление зависимостей слоя инфраструктуры
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddSingleton<DatabaseSingleton>()
+            services.AddSingleton<MyDbContext>()
                 .AddTransient<IClientsRepository, ClientsRepository>()
                 .AddTransient<IEmployeeRepository, EmployeeRepository>()
                 .AddTransient<IOperationsRepository, OperationsRepository>()

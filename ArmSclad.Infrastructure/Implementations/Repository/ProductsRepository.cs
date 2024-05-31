@@ -1,15 +1,14 @@
-﻿using ArmSclad.Domain.Interfaces.Repository;
-using ArmSclad.Core.Entities;
+﻿using ArmSclad.Core.Entities;
 using ArmSclad.Core.Exceptions;
+using ArmSclad.Domain.Interfaces.Repository;
 using ArmSclad.Infrastructure.Database.Context;
 using ArmSclad.Infrastructure.Database.Model;
-using System.Diagnostics;
 
 namespace ArmSclad.Infrastructure.Implementations.Repository
 {
-    public class ProductsRepository(DatabaseSingleton db) : IProductsRepository
+    public class ProductsRepository(MyDbContext db) : IProductsRepository
     {
-        public int Add(ProductEntity productEntity)
+        public Task<int> Add(ProductEntity productEntity)
         {
             Product product = new Product()
             {
@@ -20,19 +19,19 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 SpaceOccupied = productEntity.SpaceOccupied.Value
             };
 
-            db.DbContext.Products.Add(product);
-            db.DbContext.SaveChanges();
-            return product.Id;
+            db.Products.Add(product);
+            db.SaveChanges();
+            return Task.FromResult(product.Id);
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
-            Product product = db.DbContext.Products.Find(id);
+            Product product = db.Products.Find(id);
             if (product != null)
             {
-                db.DbContext.Products.Remove(product);
-                db.DbContext.SaveChanges();
-                return;
+                db.Products.Remove(product);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
 
             throw new NotFoundException();
@@ -40,7 +39,7 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         public List<ProductEntity> Get(int from = 0, int to = 10)
         {
-            return db.DbContext.Products.Where(p => p.IsActive).OrderBy(p => p.Name).Select(p => 
+            return db.Products.Where(p => p.IsActive).OrderBy(p => p.Name).Select(p =>
             new ProductEntity
             {
                 Description = p.Description,
@@ -54,8 +53,8 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
 
         public List<ProductEntity> GetByOrder(int orderId, int from = 0, int to = 10)
         {
-            return db.DbContext.Products.Join(
-                db.DbContext.OrdersProducts.Where(ord => ord.OrderId == orderId),
+            return db.Products.Join(
+                db.OrdersProducts.Where(ord => ord.OrderId == orderId),
                 p => p.Id,
                 o => o.ProductId,
                 (p, o) => new ProductEntity
@@ -66,14 +65,14 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                     Id = p.Id,
                     Price = p.Price,
                     NumberPiecesInPackage = p.NumberPiecesInPackage,
-                    NumberPackages = db.DbContext.OrdersProducts.First(op => op.OrderId == orderId && op.ProductId == p.Id).Amount
+                    NumberPackages = db.OrdersProducts.First(op => op.OrderId == orderId && op.ProductId == p.Id).Amount
                 }).Skip(from).Take(to).ToList();
         }
 
         public List<ProductEntity> GetByStorage(int storageId, int from = 0, int to = 10)
         {
-            return db.DbContext.Products.Join(
-               db.DbContext.StoragesProducts.Where(stg => stg.StorageId == storageId),
+            return db.Products.Join(
+               db.StoragesProducts.Where(stg => stg.StorageId == storageId),
                p => p.Id,
                o => o.ProductId,
                (p, o) => new ProductEntity
@@ -84,13 +83,13 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                    Id = p.Id,
                    Price = p.Price,
                    NumberPiecesInPackage = p.NumberPiecesInPackage,
-                   NumberPackages = db.DbContext.StoragesProducts.First(sp => sp.StorageId == storageId && sp.ProductId == p.Id).Amount
+                   NumberPackages = db.StoragesProducts.First(sp => sp.StorageId == storageId && sp.ProductId == p.Id).Amount
                }).Skip(from).Take(to).ToList();
         }
 
-        public void Update(ProductEntity productEntity)
+        public Task Update(ProductEntity productEntity)
         {
-            Product product = db.DbContext.Products.Find(productEntity.Id);
+            Product product = db.Products.Find(productEntity.Id);
             if (product != null)
             {
                 product.Description = productEntity.Description;
@@ -99,9 +98,9 @@ namespace ArmSclad.Infrastructure.Implementations.Repository
                 product.Name = productEntity.Name;
                 product.NumberPiecesInPackage = productEntity.NumberPiecesInPackage.Value;
 
-                db.DbContext.Products.Update(product);
-                db.DbContext.SaveChanges();
-                return;
+                db.Products.Update(product);
+                db.SaveChanges();
+                return Task.CompletedTask;
             }
 
             throw new NotFoundException();

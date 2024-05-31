@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Products.Commands.AddProduct
     {
         public Task<int> Handle(AddProductCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => productsRepository.Add(request.Product));
+            return productsRepository.Add(request.Product);
         }
     }
 }

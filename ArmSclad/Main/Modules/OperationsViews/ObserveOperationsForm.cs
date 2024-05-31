@@ -60,8 +60,11 @@ namespace ArmSclad.UI.Main.Modules.OperationsViews
 
         private void PrevPageButton_Click(object sender, EventArgs e)
         {
-            _pageNumber--;
-            LoadData();
+            if (_pageNumber > 0)
+            {
+                _pageNumber--;
+                LoadData();
+            }
         }
 
         private void UpdatePageButton_Click(object sender, EventArgs e)
@@ -88,7 +91,7 @@ namespace ArmSclad.UI.Main.Modules.OperationsViews
 
             foreach (var operation in _operations)
             {
-                OperationsList.Items.Add(new ListViewItem(new string[] {
+                ListViewItem item = new ListViewItem(new string[] {
                   operation.Id.ToString(),
                   operation.Type.ToString(),
                   operation.StorageId.ToString(),
@@ -97,11 +100,18 @@ namespace ArmSclad.UI.Main.Modules.OperationsViews
                   operation.StringStatus,
                   operation.StringTarget,
                   operation.TargetId != null ? operation.TargetId.ToString() : ""
-                }));
+                });
+
+                if (operation.Status == OperationStatusEnum.Сancelled)
+                    item.BackColor = Color.Red;
+                else if (operation.Status == OperationStatusEnum.Success)
+                    item.BackColor = Color.Green;
+
+                OperationsList.Items.Add(item);
 
             }
         }
 
-      
+
     }
 }

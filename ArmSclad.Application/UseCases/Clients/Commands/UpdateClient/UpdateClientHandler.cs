@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Clients.Commands.UpdateClient
     {
         public Task Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => clientsRepository.Update(request.ClientEntity));
+            return clientsRepository.Update(request.ClientEntity);
         }
     }
 }

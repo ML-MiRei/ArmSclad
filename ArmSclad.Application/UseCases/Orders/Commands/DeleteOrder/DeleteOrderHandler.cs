@@ -7,7 +7,7 @@ namespace ArmSclad.Domain.UseCases.Orders.Commands.DeleteOrder
     {
         public Task Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => ordersRepository.Delete(request.OrderId));
+            return ordersRepository.Delete(request.OrderId);
         }
     }
 }
