@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArmSclad.Infrastructure.Database.Context
 {
-    public class MyDbContext : DbContext
+    public class MyDbContext(string connectionString) : DbContext
     {
         // таблицы базы данных
         public DbSet<Client> Clients { get; set; }
@@ -48,7 +48,7 @@ namespace ArmSclad.Infrastructure.Database.Context
             if (!optionsBuilder.IsConfigured)
             {
                 // строка подключения к базе данных
-                optionsBuilder.UseSqlServer("Server=DESKTOP-E86S7QI;Database=ArmStorage;Trusted_Connection=True;TrustServerCertificate=true;MultipleActiveResultSets=true;");
+                optionsBuilder.UseSqlServer(connectionString);
                 optionsBuilder.EnableSensitiveDataLogging();
             }
 

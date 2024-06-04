@@ -10,9 +10,9 @@ namespace ArmSclad.Infrastructure
     public static class DependencyInjection
     {
         //добавление зависимостей слоя инфраструктуры
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
         {
-            services.AddSingleton<MyDbContext>()
+            services.AddSingleton(c => new MyDbContext(connectionString))
                 .AddTransient<IClientsRepository, ClientsRepository>()
                 .AddTransient<IEmployeeRepository, EmployeeRepository>()
                 .AddTransient<IOperationsRepository, OperationsRepository>()

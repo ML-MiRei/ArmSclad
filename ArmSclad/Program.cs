@@ -11,6 +11,7 @@ using ArmSclad.UI.Main.Modules.ProductsViews;
 using ArmSclad.UI.Main.Modules.StoragesViews;
 using ArmSclad.UI.Modules.Login.View;
 using ArmSclad.UI.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -29,7 +30,7 @@ namespace ArmSclad.UI
             {
 
                 services.AddDomain();
-                services.AddInfrastructure();
+                services.AddInfrastructure(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionStringDb"].ConnectionString);
 
                 services.AddTransient<IRequestService, RequestService>();
 
