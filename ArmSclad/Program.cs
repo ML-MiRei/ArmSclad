@@ -11,7 +11,6 @@ using ArmSclad.UI.Main.Modules.ProductsViews;
 using ArmSclad.UI.Main.Modules.StoragesViews;
 using ArmSclad.UI.Modules.Login.View;
 using ArmSclad.UI.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

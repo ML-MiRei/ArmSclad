@@ -1,6 +1,5 @@
 ﻿using ArmSclad.Core.Entities;
 using ArmSclad.Domain.UseCases.Operations.Queries.GetOperationsByProduct;
-using ArmSclad.Domain.UseCases.Products.Queries.GetProducts;
 using ArmSclad.UI.Main.Modules.ProductsViews;
 using MediatR;
 
@@ -50,12 +49,17 @@ namespace ArmSclad.UI.Main.Modules.OperationsWithProductsViews
 
         private void NextPageButton_Click(object sender, EventArgs e)
         {
+            if (_selectedProduct == null)
+                return;
+            
             _pageNumber++;
             LoadData();
         }
 
         private void PrevPageButton_Click(object sender, EventArgs e)
         {
+            if (_selectedProduct == null)
+                return;
             if (_pageNumber > 0)
             {
                 _pageNumber--;
@@ -65,6 +69,8 @@ namespace ArmSclad.UI.Main.Modules.OperationsWithProductsViews
 
         private void UpdatePageButton_Click(object sender, EventArgs e)
         {
+            if (_selectedProduct == null)
+                return;
             LoadData();
         }
 

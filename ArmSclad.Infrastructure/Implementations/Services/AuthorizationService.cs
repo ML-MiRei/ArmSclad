@@ -57,7 +57,8 @@ namespace ArmSclad.Infrastructure.Implementations.Services
                 Email = employeeEntity.Email,
                 Password = employeeEntity.Password,
                 Phone = employeeEntity.Phone,
-                Role = (int)employeeEntity.Role
+                Role = (int)employeeEntity.Role,
+                StorageId = employeeEntity.StorageId
             };
 
             EmployeePosition employeePosition = db.EmployeePositions.FirstOrDefault(ep => ep.Name == employeeEntity.Position);
