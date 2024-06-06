@@ -20,12 +20,13 @@ namespace ArmSclad.UI.Main
         private static OperationsWithProductsForm _operationsWithProductsForm;
         private static OrdersForm _ordersForm;
         private static OperationsEmployeeForm _operationsEmployeeForm;
+        private static LoginForm _loginForm;
 
 
         public MainForm(StoragesForm storagesForm, ProductsForm productsForm,
             ClientsForm clientsForm, ObserveOperationsForm observeOperationsForm,
             OperationsWithProductsForm operationsWithProductsForm, OrdersForm ordersForm,
-            OperationsEmployeeForm operationsEmployeeForm)
+            OperationsEmployeeForm operationsEmployeeForm, LoginForm loginForm)
         {
             InitializeComponent();
 
@@ -36,7 +37,7 @@ namespace ArmSclad.UI.Main
             _observeOperationsForm = observeOperationsForm;
             _productsForm = productsForm;
             _operationsEmployeeForm = operationsEmployeeForm;
-
+            _loginForm = loginForm;
         }
 
         protected override void OnShown(EventArgs e)
@@ -84,7 +85,7 @@ namespace ArmSclad.UI.Main
             base.OnShown(e);
         }
 
-      
+
         protected override void OnClosing(CancelEventArgs e)
         {
             TaskManager.WaitAllTask();
@@ -111,7 +112,18 @@ namespace ArmSclad.UI.Main
                 Settings.Default.Email = "";
                 Settings.Default.Password = "";
                 Settings.Default.Save();
-                Close();
+
+                Visible = false;
+                var res = _loginForm.ShowDialog();
+
+                if (res == DialogResult.OK)
+                {
+                    Application.Restart();
+                }
+                else
+                {
+                    Close();
+                }
             }
 
         }
